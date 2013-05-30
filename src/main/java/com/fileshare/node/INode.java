@@ -6,7 +6,8 @@ import java.rmi.Remote;
 /**
  * @author Jan Paw
  *         Date: 5/28/13
+ * @deprecated
  */
 public interface INode extends Remote {
-    public void connectToServer(InetAddress inetAddress);
+    public void connect(InetAddress inetAddress);
 }
