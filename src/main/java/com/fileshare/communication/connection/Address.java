@@ -1,4 +1,4 @@
-package com.fileshare.communication;
+package com.fileshare.communication.connection;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

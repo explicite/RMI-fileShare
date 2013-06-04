@@ -1,13 +1,15 @@
 package com.fileshare.file;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.URI;
 
 /**
  * @author Jan Paw
  *         Date: 5/30/13
  */
-public class RemoteFile {
+public class RemoteFile implements Serializable {
+    private static final long serialVersionUID = 72262047174880316L;
     File file;
 
     public RemoteFile(URI uri) {

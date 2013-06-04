@@ -1,4 +1,4 @@
-package com.fileshare.communication;
+package com.fileshare.communication.connection;
 
 /**
  * @author Jan Paw

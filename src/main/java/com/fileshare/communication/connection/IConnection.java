@@ -1,4 +1,4 @@
-package com.fileshare.communication;
+package com.fileshare.communication.connection;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -8,7 +8,6 @@ import java.rmi.RemoteException;
  *         Date: 5/30/13
  */
 public interface IConnection extends Remote {
-    public Message receive() throws RemoteException;
-
-    public void send(Message message) throws RemoteException;
+    public Integer getID() throws RemoteException;
+    public String echo(String s) throws RemoteException;
 }
