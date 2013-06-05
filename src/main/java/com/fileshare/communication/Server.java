@@ -17,9 +17,10 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Jan Paw
  *         Date: 6/4/13
  */
-public class Server extends UnicastRemoteObject implements IConnection {
+
+public final class Server extends UnicastRemoteObject implements IConnection {
     private static final Logger logger = LogManager.getLogger(Server.class.getName());
-    private static Integer nodeID = 0;
+    private static volatile Integer nodeID = 0;
     private static Address address;
 
     static {
@@ -33,8 +34,8 @@ public class Server extends UnicastRemoteObject implements IConnection {
 
     public static void main(String[] args) {
         System.setProperty("java.security.policy", Paths.get("").toAbsolutePath().toString()
-                + "\\src\\main\\resources\\server" +
-                ".policy");
+                + "\\src\\main\\resources\\no" +
+                ".policy");     //TODO connection problems with server.policy
 
         logger.trace("server run | address=" + address);
 
@@ -51,6 +52,7 @@ public class Server extends UnicastRemoteObject implements IConnection {
         } catch (RemoteException e) {
             logger.trace("java RMI registry already exists.");
         }
+
         try {
             Server server = new Server();
             Naming.rebind("//localhost/Server", server);
