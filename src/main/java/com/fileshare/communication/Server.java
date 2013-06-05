@@ -33,7 +33,8 @@ public class Server extends UnicastRemoteObject implements IConnection {
 
     public static void main(String[] args) {
         System.setProperty("java.security.policy", Paths.get("").toAbsolutePath().toString()
-                + "\\src\\main\\resources\\server.policy"); //TODO do properties.xsl
+                + "\\src\\main\\resources\\server" +
+                ".policy");
 
         logger.trace("server run | address=" + address);
 

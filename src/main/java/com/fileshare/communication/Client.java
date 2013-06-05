@@ -14,8 +14,7 @@ public class Client {
 
     public static void run(String[] args) {
         System.setProperty("java.security.policy", Paths.get("").toAbsolutePath().toString()
-                + "\\src\\main\\resources\\client.policy"); //TODO do properties.xsl
-
+                + "\\src\\main\\resources\\client.policy");
     }
 
     public Client() {

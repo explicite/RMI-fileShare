@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="WARN">
+<configuration status="warn" name="Server" packages="">
     <appenders>
+        <File name="Server" fileName="logs/server.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="Client" fileName="logs/client.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
     </appenders>
     <loggers>
-        <logger name="com.foo.Bar" level="trace">
+        <logger name="com.fileshare.communication" level="trace" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
+        <logger name="com.fileshare.communication.Server" level="trace" additivity="true">
+            <appender-ref ref="Server"/>
+        </logger>
+        <logger name="com.fileshare.communication.Client" level="trace" additivity="true">
+            <appender-ref ref="Client"/>
+        </logger>
         <root level="error">
+            <appender-ref ref="Server"/>
+            <appender-ref ref="Client"/>
             <appender-ref ref="Console"/>
         </root>
     </loggers>
