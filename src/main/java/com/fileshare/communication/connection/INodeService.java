@@ -5,9 +5,10 @@ import java.rmi.RemoteException;
 
 /**
  * @author Jan Paw
- *         Date: 5/30/13
+ *         Date: 6/7/13
  */
-public interface IConnection extends Remote {
-    public Integer getID() throws RemoteException;
+public interface INodeService extends Remote {
     public String echo(String s) throws RemoteException;
+
+    public void bind(INodeService connection) throws RemoteException;
 }
