@@ -19,7 +19,7 @@ import java.util.LinkedList;
 public class Node {
     private static final Logger logger = LogManager.getLogger(Node.class.getName());
     private String name = null;
-    private LinkedList<INodeService> connections = new LinkedList<INodeService>();
+    private LinkedList<INodeService> connections = new LinkedList<>();
 
     public Node(String name) {
         super();
@@ -55,7 +55,6 @@ public class Node {
         }
     }
 
-
     //TODO for tests only - should be excluded from Node.class!
 
     public void connect(String s) {
@@ -65,9 +64,7 @@ public class Node {
             logger.trace("New connection");
         } catch (NotBoundException e) {
             logger.entry(e);
-        } catch (MalformedURLException e) {
-            logger.error(e);
-        } catch (RemoteException e) {
+        } catch (MalformedURLException | RemoteException e) {
             logger.error(e);
         }
     }
@@ -81,5 +78,4 @@ public class Node {
         }
         return echo;
     }
-
 }

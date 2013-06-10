@@ -18,11 +18,11 @@ public class NetworkService {
     public static void main(String args[]) {
         boot(Policy.JAR);
         String name;
-        if (args.length > 0 && args != null)
+        if (args.length > 0)
             name = args[0];
         else
             name = "Node";
-        final Node node = new Node(name);
+        new Node(name);
     }
 
     public static void boot(Policy policy) {
