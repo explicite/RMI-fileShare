@@ -12,6 +12,8 @@
         <jdk.version>1.7</jdk.version>
         <log4j.version>2.0-beta6</log4j.version>
         <junit.version>4.11</junit.version>
+        <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>Cp1252</project.reporting.outputEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -49,11 +51,33 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.fileshare.communication.Node</mainClass>
+                            <mainClass>NetworkService</mainClass>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/policy</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/policy</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
