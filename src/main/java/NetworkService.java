@@ -31,7 +31,7 @@ public class NetworkService {
         setRegistry();
     }
 
-    public static void setPolicy(Policy policy) {
+    private static void setPolicy(Policy policy) {
         logger.trace("Policy setting!");
         System.setProperty("java.security.policy", policy.url());
         logger.info("Set policy: " + System.getProperty("java.security.policy"));

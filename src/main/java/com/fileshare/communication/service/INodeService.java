@@ -1,4 +1,4 @@
-package com.fileshare.communication.connection;
+package com.fileshare.communication.service;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

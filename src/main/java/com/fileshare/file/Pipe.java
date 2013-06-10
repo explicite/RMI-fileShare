@@ -8,13 +8,13 @@ import java.util.Hashtable;
  *         Date: 6/10/13
  */
 public class Pipe implements Serializable {
-    final public static int BUF_SIZE = 1024 * 64;
+    private final static int BUF_SIZE = 1024 * 64;
     private static int keySeed = 0;
-    private static Hashtable<Integer, OutputStream>
+    private static final Hashtable<Integer, OutputStream>
             registry = new Hashtable<>();
-    private transient int key;
+    private final transient int key;
     private transient InputStream in;
-    private transient boolean isOutputRegistration;
+    private final transient boolean isOutputRegistration;
 
     public Pipe(int key, InputStream in) {
         this.key = key;

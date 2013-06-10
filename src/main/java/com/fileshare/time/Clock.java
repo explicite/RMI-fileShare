@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 public class Clock implements IClock {
-    private Map<Integer, Integer> vector = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> vector = new HashMap<>();
     private int nodeId;
 
     public Clock(Integer id) {

@@ -2,8 +2,6 @@ import com.fileshare.communication.Node;
 import com.fileshare.configuration.Policy;
 import org.junit.Test;
 
-import java.rmi.UnmarshalException;
-
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -12,7 +10,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class EchoTest {
     //[1v1] echo test - local -  issue#6
-    @Test
+    @Test(timeout = 1024)
     public void oneToOneEcho() {
         NetworkService.boot(Policy.TEST);
         final String node1Name = "node1";

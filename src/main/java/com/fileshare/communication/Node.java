@@ -1,6 +1,6 @@
 package com.fileshare.communication;
 
-import com.fileshare.communication.connection.INodeService;
+import com.fileshare.communication.service.INodeService;
 import com.fileshare.configuration.Messages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +19,7 @@ import java.util.LinkedList;
 public class Node {
     private static final Logger logger = LogManager.getLogger(Node.class.getName());
     private String name = null;
-    private LinkedList<INodeService> connections = new LinkedList<>();
+    private final LinkedList<INodeService> connections = new LinkedList<>();
 
     public Node(String name) {
         super();
@@ -28,9 +28,9 @@ public class Node {
     }
 
     static class NodeService extends UnicastRemoteObject implements INodeService {
-        protected NodeService() throws RemoteException {
+        NodeService() throws RemoteException {
             super();
-            logger.info("New connection in Node: ");
+            logger.info("New service in Node: ");
         }
 
         @Override
@@ -61,7 +61,7 @@ public class Node {
         try {
             INodeService connection = (INodeService) Naming.lookup(s);
             connections.add(connection);
-            logger.trace("New connection");
+            logger.trace("New service");
         } catch (NotBoundException e) {
             logger.entry(e);
         } catch (MalformedURLException | RemoteException e) {

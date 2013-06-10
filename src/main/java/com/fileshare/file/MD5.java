@@ -8,8 +8,8 @@ import java.security.MessageDigest;
  * @author Jan Paw
  *         Date: 6/10/13
  */
-public class MD5 {
-    public static byte[] createChecksum(String fileName) throws Exception {
+class MD5 {
+    private static byte[] createChecksum(String fileName) throws Exception {
         InputStream inputStream = new FileInputStream(fileName);
 
         byte[] buffer = new byte[1024];
@@ -31,8 +31,8 @@ public class MD5 {
         byte[] bytes = createChecksum(filename);
         String result = "";
 
-        for (int i = 0; i < bytes.length; i++) {
-            result += Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1);
+        for (byte aByte : bytes) {
+            result += Integer.toString((aByte & 0xff) + 0x100, 16).substring(1);
         }
         return result;
     }
