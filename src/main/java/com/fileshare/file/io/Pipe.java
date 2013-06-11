@@ -1,6 +1,10 @@
-package com.fileshare.file;
+package com.fileshare.file.io;
 
-import java.io.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
@@ -10,19 +14,19 @@ import java.util.Hashtable;
 public class Pipe implements Serializable {
     private final static int BUF_SIZE = 1024 * 64;
     private static int keySeed = 0;
-    private static final Hashtable<Integer, OutputStream>
+    private static final Hashtable<Integer, java.io.OutputStream>
             registry = new Hashtable<>();
     private final transient int key;
-    private transient InputStream in;
+    private transient java.io.InputStream in;
     private final transient boolean isOutputRegistration;
 
-    public Pipe(int key, InputStream in) {
+    public Pipe(int key, java.io.InputStream in) {
         this.key = key;
         this.in = in;
         isOutputRegistration = false;
     }
 
-    public Pipe(OutputStream out) {
+    public Pipe(java.io.OutputStream out) {
         isOutputRegistration = true;
         synchronized (registry) {
             key = keySeed++;
@@ -58,7 +62,7 @@ public class Pipe implements Serializable {
     private void readObject(ObjectInputStream in) throws
             IOException {
         int key = in.readInt();
-        OutputStream out = registry.remove(key);
+        java.io.OutputStream out = registry.remove(key);
         byte[] b = new byte[BUF_SIZE];
         int len;
         do {

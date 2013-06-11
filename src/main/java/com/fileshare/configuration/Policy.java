@@ -7,7 +7,7 @@ import java.nio.file.Paths;
  *         Date: 6/10/13
  */
 public enum Policy {
-    JAR("\\policy\\no.policy"), TEST("\\src\\policy\\no.policy\\");
+    JAR("\\policy\\no.policy"), TEST("\\src\\policy\\no.policy");
 
     private final String url;
 

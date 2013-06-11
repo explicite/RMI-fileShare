@@ -6,3 +6,5 @@
 *.ear
 # Log Files #
 *.log
+# Data Files #
+*.data

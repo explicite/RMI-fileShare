@@ -11,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
  * @author Jan Paw
  *         Date: 6/10/13
  */
+@Deprecated
 public class NetworkService {
     private static final Logger logger = LogManager.getLogger(Node.class.getName());
 

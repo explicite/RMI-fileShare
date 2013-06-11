@@ -16,6 +16,7 @@ import java.util.LinkedList;
  * @author Jan Paw
  *         Date: 6/7/13
  */
+@Deprecated
 public class Node {
     private static final Logger logger = LogManager.getLogger(Node.class.getName());
     private String name = null;

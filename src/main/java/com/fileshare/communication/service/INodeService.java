@@ -8,7 +8,9 @@ import java.rmi.RemoteException;
  *         Date: 6/7/13
  */
 public interface INodeService extends Remote {
-    public String echo(String s) throws RemoteException;
+    public String echo(String s)
+            throws RemoteException;
 
-    public void bind(INodeService connection) throws RemoteException;
+    public void bind(INodeService connection)
+            throws RemoteException;
 }

@@ -4,6 +4,9 @@
         <File name="Node" fileName="log/node.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
+        <File name="Peer" fileName="log/peer.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
@@ -15,8 +18,12 @@
         <logger name="com.fileshare.communication.Node" level="trace" additivity="true">
             <appender-ref ref="Node"/>
         </logger>
+        <logger name="com.fileshare.communication.PeerService" level="trace" additivity="true">
+            <appender-ref ref="Peer"/>
+        </logger>
         <root level="error">
             <appender-ref ref="Node"/>
+            <appender-ref ref="Peer"/>
             <appender-ref ref="Console"/>
         </root>
     </loggers>
