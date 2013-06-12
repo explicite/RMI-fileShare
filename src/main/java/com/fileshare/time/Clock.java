@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 public class Clock implements IClock {
-    private Map<Integer, Integer> vector = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> vector = new HashMap<>();
     private int nodeId;
 
     public Clock(Integer id) {
@@ -59,7 +59,7 @@ public class Clock implements IClock {
 
     @Override
     public boolean equivalent(Clock current) {
-        return (isGreater(current) != true && this.isLower(current) != true);
+        return (!isGreater(current) && !isLower(current));
     }
 
     @Override
@@ -70,8 +70,7 @@ public class Clock implements IClock {
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                Integer get = this.vector.get(((Integer) pairs.getKey()));
-                if (!((Integer) pairs.getValue() < get)) {
+                if (!((Integer) pairs.getValue() < (Integer) pairs.getValue())) {
                     return false;
                 }
                 it.remove();
@@ -90,8 +89,8 @@ public class Clock implements IClock {
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                Integer get = this.vector.get(((Integer) pairs.getKey()));
-                if (!((Integer) pairs.getValue() > get)) {
+
+                if (!((Integer) pairs.getValue() > (Integer)pairs.getValue())) {
                     return false;
                 }
                 it.remove();
@@ -116,8 +115,7 @@ public class Clock implements IClock {
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                Integer get = this.vector.get(((Integer) pairs.getKey()));
-                if (pairs.getValue() != get) {
+                if ( pairs.getValue() !=  pairs.getValue()) {
                     return false;
                 }
                 it.remove();
