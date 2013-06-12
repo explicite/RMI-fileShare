@@ -8,7 +8,6 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * @author Kamil Sikora
@@ -20,8 +19,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
     private Path path;
     private final Map<WatchKey, Path> keys;
-    private ArrayList<Path> changedItems;
-
 
     /**
      * @param watchedDir ścieżka do obserwowania.
@@ -32,7 +29,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
         this.interval = interval;
         this.keys = new HashMap<>();
         this.path = new File(watchedDir).toPath();
-        this.changedItems = new ArrayList<>();
 
         try {
             this.watchService = FileSystems.getDefault().newWatchService();
@@ -52,8 +48,10 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
     @Override
     protected void watchChanges() {
-        // you spin me round, round - infinite loop
+        ArrayList<PathInfo> changedItems;
+        // You spin me round, round baby... infinite loop
         while (true) {
+            changedItems = new ArrayList<>();
             WatchKey key;
             try {
                 key = watchService.take();
@@ -71,7 +69,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 WatchEvent<Path> ev = cast(event);
                 Path name = ev.context();
                 Path child = dir.resolve(name);
-
+                changedItems.add(new PathInfo(name, ev.kind()));
             }
 
             boolean valid = key.reset();
@@ -83,8 +81,10 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 }
             }
 
+            sendChanges(changedItems);
+
             try {
-                wait(interval * 1000);
+                Thread.sleep(interval * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -92,7 +92,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
     }
 
     @Override
-    public void sendChanges(ArrayList<Path> files) {
+    public void sendChanges(ArrayList<PathInfo> files) {
         hasChanged();
         notifyObservers(files);
         clearChanged();
@@ -105,6 +105,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
     public static void main(String[] args) {
         DirectoryWatcher dw = new DirectoryWatcher("./", 5);
-        dw.watchChanges();
+        new Thread(dw).start();
     }
 }

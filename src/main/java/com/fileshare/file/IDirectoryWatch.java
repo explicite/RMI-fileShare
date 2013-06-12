@@ -30,7 +30,8 @@ public abstract class IDirectoryWatch extends Observable implements Runnable {
     /**
      * <p>Metoda wysyła do obiektu obserwującego zmiany, wykryte przez monitora plików.</p>
      * <p>TODO do dyskusji z osobą zajmującą się przesłaniem plików, jak przesyłać zmiany. Popchnięcie listy zmienionych plików, z użyciem wzorca Obserwator wydaje mi się najrozsądniejszym rozwiązaniem.</p>
+     * @param files
      */
-    public abstract void sendChanges(ArrayList<Path> files);
+    public abstract void sendChanges(ArrayList<PathInfo> files);
 
 }
