@@ -18,17 +18,17 @@ public class FileTransferTest {
             throws IOException {
 
         if (in instanceof InputStream) {
-            System.out.println("using RMIPipe of RMIInputStream");
+            System.out.println("Using Pipe of InputStream");
             ((InputStream) in).transfer(out);
             return;
         }
 
         if (out instanceof OutputStream) {
-            System.out.println("using RMIPipe of RMIOutputStream");
+            System.out.println("Using Pipe of OutputStream");
             ((OutputStream) out).transfer(in);
             return;
         }
-        System.out.println("using byte[] read/write");
+        System.out.println("Using byte[] read/write");
         byte[] b = new byte[BUF_SIZE];
         int len;
         while ((len = in.read(b)) >= 0) {
