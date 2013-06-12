@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 public class Clock implements IClock {
-    private Map<Integer, Integer> vector = new HashMap<>();
+    private Map<Integer, Integer> vector = new HashMap<Integer, Integer>();
     private int nodeId;
 
     public Clock(Integer id) {
@@ -59,7 +59,7 @@ public class Clock implements IClock {
 
     @Override
     public boolean equivalent(Clock current) {
-        return false;  //TODO
+        return (isGreater(current) != true && this.isLower(current) != true);
     }
 
     @Override
@@ -84,7 +84,22 @@ public class Clock implements IClock {
 
     @Override
     public boolean isLower(Clock current) {
-        return false;  //TODO
+        if (current.equals(this)) {
+            return false;
+        } else {
+            Iterator it = current.vector.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry) it.next();
+                Integer get = this.vector.get(((Integer) pairs.getKey()));
+                if (!((Integer) pairs.getValue() > get)) {
+                    return false;
+                }
+                it.remove();
+            }
+
+            return true;
+        }
+
     }
 
     @Override
