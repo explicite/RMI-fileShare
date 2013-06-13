@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
  *         Date: 6/12/13
  */
 public class Address {
-    private final int port = 1099;
+    public final static int PORT = 1099;
     private InetAddress inetAddress;
     private String name;
 
@@ -59,7 +59,7 @@ public class Address {
     public boolean isReachable(int timeout) {
         Socket socket = new Socket();
         try {
-            socket.connect(new InetSocketAddress(inetAddress, port), timeout);
+            socket.connect(new InetSocketAddress(inetAddress, Address.PORT), timeout);
             return true;
         } catch (IOException e) {
             return false;

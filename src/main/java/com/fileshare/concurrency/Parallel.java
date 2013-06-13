@@ -12,7 +12,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 
 public class Parallel {
-    private static final int NUM_CORES = Runtime.getRuntime().availableProcessors();
+    private final static int NUM_CORES = Runtime.getRuntime().availableProcessors();
     private static ForkJoinPool forkJoinPool;
 
     public static <T> void For(final Iterable<T> elements, final Operation<T> operation) {

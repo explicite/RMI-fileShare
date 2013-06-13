@@ -23,8 +23,8 @@ import java.util.LinkedList;
  *         Date: 6/11/13
  */
 public class PeerService {
-    private static final Logger logger = LogManager.getLogger(PeerService.class.getName());
-    private static volatile LinkedList<Connection> connections = new LinkedList<>();
+    private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
+    private volatile static LinkedList<Connection> connections = new LinkedList<>();
 
     public interface IPeer extends Remote {
         public java.io.OutputStream getOutputStream(File f)
