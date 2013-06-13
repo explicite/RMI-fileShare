@@ -23,7 +23,7 @@ import static java.rmi.server.UnicastRemoteObject.unexportObject;
  *         Date: 6/12/13
  */
 public class BindingInterface {
-    private static final Logger logger = LogManager.getLogger(PeerService.class.getName());
+    private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
     private LinkedList<Address> addresses = new LinkedList<>();
     private Registry registry;
     private PeerService.IPeer peer;

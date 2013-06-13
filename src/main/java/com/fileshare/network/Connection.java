@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -20,8 +18,8 @@ import java.rmi.registry.Registry;
  *         Date: 6/12/13
  */
 public class Connection {
-    final public static int BUF_SIZE = 1024 * 64;
-    final public static int TIMEOUT = 2000;
+    public final static int BUF_SIZE = 1024 * 64;
+    public final static int TIMEOUT = 2000;
     private Address address;
     private PeerService.IPeer peer = null;
     private Registry registry;
