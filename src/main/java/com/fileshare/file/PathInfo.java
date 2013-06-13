@@ -11,9 +11,9 @@ import java.nio.file.WatchEvent;
  *         Data: 12.06.13
  */
 public class PathInfo {
-    public final int FLAG_MODIFIED = 1;
-    public final int FLAG_DELETED = 2;
-    public final int FLAG_CREATED = 4;
+    public static final int FLAG_MODIFIED = 1;
+    public static final int FLAG_DELETED = 2;
+    public static final int FLAG_CREATED = 4;
 
     private Path path;
     private int flag;
