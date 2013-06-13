@@ -16,5 +16,7 @@ public interface IClock {
     public void incrementClock();
     public boolean equivalent(Clock current);
     public boolean isGreater(Clock current);
+    public boolean isGreaterOrEqual(Clock current);
     public boolean isLower(Clock current);
+    public void consolidate(Clock current);
 }
