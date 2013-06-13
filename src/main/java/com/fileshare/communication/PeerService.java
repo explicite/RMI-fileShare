@@ -4,18 +4,19 @@ import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
+import com.fileshare.network.Address;
+import com.fileshare.network.BindingInterface;
+import com.fileshare.network.Connection;
+import com.fileshare.network.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 
 /**
  * @author Jan Paw
@@ -23,6 +24,7 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class PeerService {
     private static final Logger logger = LogManager.getLogger(PeerService.class.getName());
+    private static volatile LinkedList<Connection> connections = new LinkedList<>();
 
     public interface IPeer extends Remote {
         public java.io.OutputStream getOutputStream(File f)
@@ -33,26 +35,25 @@ public class PeerService {
     }
 
     public static class Peer extends UnicastRemoteObject implements IPeer {
-        Registry registry;
-        String name;
+        Address address;
+        BindingInterface bindingInterface;
 
-        public Peer(String name) throws RemoteException {
+        public Peer(String name) throws RemoteException, AlreadyBoundException {
             super();
-            this.name = name;
+            this.address = new Address(name);
             logger.info("New peer: " + name);
+            this.bindingInterface = new BindingInterface(name, this);
         }
 
         public void start() throws Exception {
-            registry = LocateRegistry.createRegistry(1099);
-            registry.bind(name, this);
-            logger.info("Binding peer: " + name);
+            logger.info("Binding network interface");
+            bindingInterface.bind();
+            connections = Scanner.scan(); //TODO periodic inv
         }
 
         public void stop() throws Exception {
-            registry.unbind(name);
-            unexportObject(this, true);
-            unexportObject(registry, true);
-            logger.info("Unbinding peer: " + name);
+            logger.info("Unbinding network interface");
+            bindingInterface.unbind();
         }
 
         @Override
@@ -64,8 +65,24 @@ public class PeerService {
         public java.io.InputStream getInputStream(File f) throws IOException, RemoteException {
             return new InputStream(new InputStreamService(new FileInputStream(f)));
         }
+
+        //TODO only for KMich ;>
+        public void broadcast(File file) throws IOException {
+            for (Connection connection : connections) {
+                logger.info("Uploading file:\nName: " + file.getName()
+                        + "\nFrom: " + address.toString()
+                        + " To: " + connection.getAddress());
+                long len = file.length();
+                long t = System.currentTimeMillis();
+                connection.upload(file, new File(file.getName() + System.currentTimeMillis()));
+                t = (System.currentTimeMillis() - t) / 1000;
+                logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
+                        " MB/s");
+            }
+        }
     }
 
+    //TODO only for KMich ;>
     public static void main(String[] args) throws Exception {
         String name;
         if (args.length > 0)
@@ -75,7 +92,19 @@ public class PeerService {
 
         Peer peer = new Peer(name);
         peer.start();
-        Thread.sleep(5 * 60 * 1000); //TODO remove when PeerService become server
+        if (args.length > 1) {
+            logger.info("Broadcast!");
+            try {
+                RandomAccessFile f = new RandomAccessFile("1MB", "rw");
+                f.setLength(1024 * 1024);
+                File testFile = new File("1MB");
+                peer.broadcast(testFile);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+
+        Thread.sleep(5 * 60 * 1000);
         peer.stop();
     }
 }

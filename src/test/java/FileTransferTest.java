@@ -38,15 +38,17 @@ public class FileTransferTest {
         out.close();
     }
 
-    public static void upload(PeerService.IPeer server, File src,
+    public static void upload(PeerService.IPeer peer, File src,
                               File dest) throws IOException {
+        long t;
+        t = System.currentTimeMillis();
         copy(new FileInputStream(src),
-                server.getOutputStream(dest));
+                peer.getOutputStream(dest));
     }
 
-    public static void download(PeerService.IPeer server, File src,
+    public static void download(PeerService.IPeer peer, File src,
                                 File dest) throws IOException {
-        copy(server.getInputStream(src),
+        copy(peer.getInputStream(src),
                 new FileOutputStream(dest));
     }
 
@@ -58,7 +60,7 @@ public class FileTransferTest {
         PeerService.IPeer server = (PeerService.IPeer) Naming.lookup(url);
         try {
             RandomAccessFile f = new RandomAccessFile("Test1GB.dat", "rw");
-            f.setLength(1024 * 1024 * 1024);
+            f.setLength(1024 * 1024 );
 
         } catch (Exception e) {
             System.err.println(e);
@@ -75,7 +77,7 @@ public class FileTransferTest {
                 " MB/s");
 
         t = System.currentTimeMillis();
-        upload(server, new File("download.tif"),
+        upload(server, new File("download.dat"),
                 new File("upload.dat"));
         t = (System.currentTimeMillis() - t) / 1000;
         System.out.println("upload: " + (len / t / 1000000d) +
