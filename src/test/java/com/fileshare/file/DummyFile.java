@@ -1,9 +1,5 @@
 package com.fileshare.file;
 
-/**
- * @author: Kamil
- */
-
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -18,8 +14,8 @@ public class DummyFile {
     /**
      * @param size size in bytes.
      */
-    public static File generateSize(int size) {
-        File file = new File(getFileName(size));
+    public static File generateFile(String path, int size) {
+        File file = new File(path + "//" + getFileName(size));
 
         try {
             RandomAccessFile raf = new RandomAccessFile(file, "rw");
