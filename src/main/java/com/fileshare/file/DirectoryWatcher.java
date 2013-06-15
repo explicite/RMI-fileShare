@@ -16,9 +16,8 @@ import java.util.Map;
 public class DirectoryWatcher extends IDirectoryWatch {
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(DirectoryWatcher.class.getName());
-
-    private Path path;
     private final Map<WatchKey, Path> keys;
+    private Path path;
 
     /**
      * @param watchedDir ścieżka do obserwowania.
@@ -46,6 +45,11 @@ public class DirectoryWatcher extends IDirectoryWatch {
         return (WatchEvent<T>) event;
     }
 
+    public static void main(String[] args) {
+        DirectoryWatcher dw = new DirectoryWatcher("./", 5);
+        new Thread(dw).start();
+    }
+
     @Override
     protected void watchChanges() {
         ArrayList<PathInfo> changedItems;
@@ -64,8 +68,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 continue;
 
             for (WatchEvent<?> event : key.pollEvents()) {
-                WatchEvent.Kind kind = event.kind();
-
                 WatchEvent<Path> ev = cast(event);
                 Path name = ev.context();
                 Path child = dir.resolve(name);
@@ -81,19 +83,20 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 }
             }
 
-            sendChanges(changedItems);
+            if (changedItems.size() > 0)
+                sendChanges(changedItems);
 
-            try {
+         /*   try {
                 Thread.sleep(interval * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
     @Override
     public void sendChanges(ArrayList<PathInfo> files) {
-        hasChanged();
+        setChanged();
         notifyObservers(files);
         clearChanged();
     }
@@ -101,10 +104,5 @@ public class DirectoryWatcher extends IDirectoryWatch {
     @Override
     public void run() {
         watchChanges();
-    }
-
-    public static void main(String[] args) {
-        DirectoryWatcher dw = new DirectoryWatcher("./", 5);
-        new Thread(dw).start();
     }
 }
