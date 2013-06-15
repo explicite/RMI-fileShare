@@ -5,8 +5,6 @@ import com.fileshare.concurrency.Parallel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 /**
@@ -22,24 +20,21 @@ public enum Scanner {
     public static LinkedList<Connection> scan() {
         addresses = new LinkedList<>();
         connections = new LinkedList<>();
-
         String localPrefix = "0.0.0.";
         String localPostfix = "0";
-        try {
-            InetAddress address = InetAddress.getLocalHost();
-            String hostAddress = address.getHostAddress();
+
+        if (NetworkInterfaces.networkInterfaces.size() > 0) {//TODO add exception no network connection!
+            String hostAddress = NetworkInterfaces.networkInterfaces.getFirst().getHostAddress();
             localPrefix = hostAddress.substring(0, hostAddress.lastIndexOf(".") + 1);
             localPostfix = hostAddress.substring(hostAddress.lastIndexOf(".") + 1, hostAddress.length());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         }
 
-        for (int host = 0; host < 256; host++) {
+        for (int host = 0; host < 256; host++) {    //TODO IPv6
             if (host != Integer.valueOf(localPostfix))
                 addresses.add(new Address(localPrefix + host, "peer"));
         }
 
-        Parallel.For(255, addresses, new Parallel.Operation<Address>() {
+        Parallel.For(addresses.size(), addresses, new Parallel.Operation<Address>() {
             @Override
             public void perform(Address address) {
                 if (address.isReachable(Connection.TIMEOUT))
