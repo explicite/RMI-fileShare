@@ -5,7 +5,7 @@ import com.fileshare.communication.service.impl.OutputStreamService;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 import com.fileshare.network.Address;
-import com.fileshare.network.BindingInterface;
+import com.fileshare.network.BindingHandler;
 import com.fileshare.network.Connection;
 import com.fileshare.network.Scanner;
 import org.apache.logging.log4j.LogManager;
@@ -36,24 +36,24 @@ public class PeerService {
 
     public static class Peer extends UnicastRemoteObject implements IPeer {
         Address address;
-        BindingInterface bindingInterface;
+        BindingHandler bindingHandler;
 
         public Peer(String name) throws RemoteException, AlreadyBoundException {
             super();
             this.address = new Address(name);
             logger.info("New peer: " + name);
-            this.bindingInterface = new BindingInterface(name, this);
+            this.bindingHandler = new BindingHandler(name, this);
         }
 
         public void start() throws Exception {
             logger.info("Binding network interface");
-            bindingInterface.bind();
+            bindingHandler.bind();
             connections = Scanner.scan(); //TODO periodic inv
         }
 
         public void stop() throws Exception {
             logger.info("Unbinding network interface");
-            bindingInterface.unbind();
+            bindingHandler.unbind();
         }
 
         @Override
