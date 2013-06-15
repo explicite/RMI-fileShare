@@ -12,9 +12,16 @@ public interface IClock {
     public void addNode(Integer id, Integer state);
     public Map<Integer, Integer> getVector();
     public void setVector(Map<Integer, Integer> vector);
+
+    /**
+     *
+     * @return size of clock (number of peers in network)
+     */
     public int getSize();
     public void incrementClock();
     public boolean equivalent(Clock current);
     public boolean isGreater(Clock current);
+    public boolean isGreaterOrEqual(Clock current);
     public boolean isLower(Clock current);
+    public void consolidate(Clock current);
 }

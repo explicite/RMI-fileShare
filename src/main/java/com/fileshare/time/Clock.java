@@ -59,51 +59,38 @@ public class Clock implements IClock {
 
     @Override
     public boolean equivalent(Clock current) {
-        return (!isGreater(current) && !isLower(current));
+        return (!this.isGreater(current) && !this.isLower(current));
     }
 
     @Override
     public boolean isGreater(Clock current) {
+        return (!this.equals(current) && this.isGreaterOrEqual(current));
+    }
+
+    @Override
+    public boolean isGreaterOrEqual(Clock current) {
         if (current.equals(this)) {
             return false;
         } else {
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                if (!((Integer) pairs.getValue() < (Integer) pairs.getValue())) {
-                    return false;
-                }
+                    if (!((Integer) pairs.getValue() <= this.vector.get(pairs.getKey()))) {
+                        return false;
+                    }
                 it.remove();
             }
-
             return true;
         }
-
     }
 
     @Override
     public boolean isLower(Clock current) {
-        if (current.equals(this)) {
-            return false;
-        } else {
-            Iterator it = current.vector.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
-
-                if (!((Integer) pairs.getValue() > (Integer)pairs.getValue())) {
-                    return false;
-                }
-                it.remove();
-            }
-
-            return true;
-        }
-
+        return (!this.equals(current) && current.isGreaterOrEqual(this));
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (super.equals(obj)) {
             return true;
         }
@@ -111,11 +98,10 @@ public class Clock implements IClock {
         Clock current = (Clock) obj;
 
         if (current.vector.size() == this.vector.size()) {
-
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                if ( pairs.getValue() !=  pairs.getValue()) {
+                if (pairs.getValue() != this.vector.get(pairs.getKey())) {
                     return false;
                 }
                 it.remove();
@@ -124,7 +110,12 @@ public class Clock implements IClock {
         } else {
             return false;
         }
-
     }
+
+    @Override
+    public void consolidate(Clock current) {
+        // TODO : compare and update vector clock
+    }
+
 }
 
