@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="warn" name="Server" packages="">
     <appenders>
-        <File name="Node" fileName="log/node.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
         <File name="Peer" fileName="log/peer.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
@@ -15,14 +12,10 @@
         <logger name="com.fileshare" level="trace" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
-        <logger name="com.fileshare.communication.Node" level="trace" additivity="true">
-            <appender-ref ref="Node"/>
-        </logger>
         <logger name="com.fileshare.communication.PeerService" level="trace" additivity="true">
             <appender-ref ref="Peer"/>
         </logger>
         <root level="error">
-            <appender-ref ref="Node"/>
             <appender-ref ref="Peer"/>
             <appender-ref ref="Console"/>
         </root>
