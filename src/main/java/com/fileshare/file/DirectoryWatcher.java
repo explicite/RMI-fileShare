@@ -51,7 +51,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
     @Override
     protected void watchChanges() {
-        ArrayList<PathInfo> changedItems;
+        ArrayList<FileInfo> changedItems;
         // You spin me round, round baby... infinite loop
         while (true) {
             changedItems = new ArrayList<>();
@@ -68,9 +68,8 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent<Path> ev = cast(event);
-                Path name = ev.context();
-                Path child = dir.resolve(name);
-                changedItems.add(new PathInfo(name, ev.kind()));
+                File name = ev.context().toFile();
+                changedItems.add(new FileInfo(name, ev.kind()));
             }
 
             boolean valid = key.reset();
@@ -94,7 +93,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
     }
 
     @Override
-    public void sendChanges(ArrayList<PathInfo> files) {
+    public void sendChanges(ArrayList<FileInfo> files) {
         setChanged();
         notifyObservers(files);
         clearChanged();

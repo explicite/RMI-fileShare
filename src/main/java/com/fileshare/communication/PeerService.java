@@ -3,7 +3,7 @@ package com.fileshare.communication;
 import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
 import com.fileshare.file.DirectoryWatcher;
-import com.fileshare.file.PathInfo;
+import com.fileshare.file.FileInfo;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 import com.fileshare.network.Address;
@@ -92,12 +92,12 @@ public class PeerService {
 
         @Override
         public void update(Observable o, Object arg) {
-            ArrayList<PathInfo> paths = (ArrayList<PathInfo>) arg;
+            ArrayList<FileInfo> paths = (ArrayList<FileInfo>) arg;
 
-            for (PathInfo path : paths) {
-                if (path.getFlag() == PathInfo.FLAG_CREATED)
+            for (FileInfo path : paths) {
+                if (path.getFlag() == FileInfo.FLAG_CREATED)
                     try {
-                        broadcast(new File(path.getPath().toString()));
+                        broadcast(new File(path.getFile().toString()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
