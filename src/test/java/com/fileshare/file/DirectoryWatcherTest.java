@@ -1,5 +1,6 @@
 package com.fileshare.file;
 
+import com.fileshare.time.Clock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +20,12 @@ public class DirectoryWatcherTest {
     DirectoryWatcher directoryWatcher;
     EventObserver eventObserver;
     File testFile;
+    Clock clock;
 
     @Before
     public void createDirectoryWatcher() {
-        directoryWatcher = new DirectoryWatcher("./test", 1);
+        clock = new Clock(1);
+        directoryWatcher = new DirectoryWatcher("./test", 1, clock);
 
         eventObserver = new EventObserver();
         directoryWatcher.addObserver(eventObserver);
@@ -40,29 +43,9 @@ public class DirectoryWatcherTest {
     }
 
     @After
-    public void clean(){
+    public void clean() {
         testFile.delete();
     }
-
-    @Test
-    public void fileCreatedTest() throws InterruptedException {
-        testFile = DummyFile.generateFile("./test", 1024);
-
-        int event = eventObserver.getCaughtEvent();
-        assertTrue(event == PathInfo.FLAG_CREATED);
-    }
-
-    @Test
-    public void fileModifiedTest() {
-
-    }
-
-    @Test
-    public void fileDeletedTest() {
-
-    }
-
-
 
     private class EventObserver implements Observer {
         private int caughtEvent;
