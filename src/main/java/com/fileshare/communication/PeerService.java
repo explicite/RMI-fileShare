@@ -2,12 +2,15 @@ package com.fileshare.communication;
 
 import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
+import com.fileshare.file.DirectoryWatcher;
+import com.fileshare.file.PathInfo;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 import com.fileshare.network.Address;
 import com.fileshare.network.BindingHandler;
 import com.fileshare.network.Connection;
 import com.fileshare.network.Scanner;
+import com.fileshare.time.Clock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +19,10 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * @author Jan Paw
@@ -34,15 +40,18 @@ public class PeerService {
                 throws IOException, RemoteException;
     }
 
-    public static class Peer extends UnicastRemoteObject implements IPeer {
+    public static class Peer extends UnicastRemoteObject implements IPeer, Observer {
         Address address;
         BindingHandler bindingHandler;
-
+        DirectoryWatcher directoryWatcher;
         public Peer(String name) throws RemoteException, AlreadyBoundException {
             super();
             this.address = new Address(name);
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
+            this.directoryWatcher = new DirectoryWatcher("./", 1, new Clock(System.currentTimeMillis()));
+            this.directoryWatcher.addObserver(Peer.this);
+            new Thread(directoryWatcher).start();
         }
 
         public void start() throws Exception {
@@ -79,6 +88,21 @@ public class PeerService {
                 logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
                         " MB/s");
             }
+        }
+
+        @Override
+        public void update(Observable o, Object arg) {
+            ArrayList<PathInfo> paths = (ArrayList<PathInfo>) arg;
+
+            for (PathInfo path : paths) {
+                if (path.getFlag() == PathInfo.FLAG_CREATED)
+                    try {
+                        broadcast(new File(path.getPath().toString()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+
         }
     }
 

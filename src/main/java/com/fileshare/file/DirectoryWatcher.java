@@ -1,5 +1,7 @@
 package com.fileshare.file;
 
+import com.fileshare.communication.PeerService;
+import com.fileshare.time.Clock;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -15,20 +17,22 @@ import java.util.Map;
  */
 public class DirectoryWatcher extends IDirectoryWatch {
 
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(DirectoryWatcher.class.getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(PeerService.class.getName());
     private final Map<WatchKey, Path> keys;
     private Path path;
+    private final Clock clock;
 
     /**
      * @param watchedDir ścieżka do obserwowania.
      * @param interval   co ile sekund sprawdzany będzie system plików
+     * @param clock
      */
-    protected DirectoryWatcher(String watchedDir, int interval) {
+    public DirectoryWatcher(String watchedDir, int interval, final Clock clock) {
         super();
         this.interval = interval;
         this.keys = new HashMap<>();
         this.path = new File(watchedDir).toPath();
-
+        this.clock = clock;
         try {
             this.watchService = FileSystems.getDefault().newWatchService();
             WatchKey key = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
@@ -43,11 +47,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
         return (WatchEvent<T>) event;
-    }
-
-    public static void main(String[] args) {
-        DirectoryWatcher dw = new DirectoryWatcher("./", 5);
-        new Thread(dw).start();
     }
 
     @Override
@@ -86,11 +85,11 @@ public class DirectoryWatcher extends IDirectoryWatch {
             if (changedItems.size() > 0)
                 sendChanges(changedItems);
 
-         /*   try {
+            try {
                 Thread.sleep(interval * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
     }
 
