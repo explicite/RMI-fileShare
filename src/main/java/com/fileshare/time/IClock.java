@@ -7,11 +7,11 @@ import java.util.Map;
  *         Date: 06.06.13
  */
 public interface IClock {
-    public int getNodeId();
-    public void setNodeId(int clientId);
-    public void addNode(Integer id, Integer state);
-    public Map<Integer, Integer> getVector();
-    public void setVector(Map<Integer, Integer> vector);
+    public Long getNodeId();
+    public void setNodeId(Long clientId);
+    public void addNode(Long id, Integer state);
+    public Map<Long, Integer> getVector();
+    public void setVector(Map<Long, Integer> vector);
 
     /**
      *

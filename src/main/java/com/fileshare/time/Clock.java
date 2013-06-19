@@ -10,38 +10,38 @@ import java.util.Map;
  */
 
 public class Clock implements IClock {
-    private Map<Integer, Integer> vector = new HashMap<>();
-    private int nodeId;
+    private Map<Long, Integer> vector = new HashMap<>();
+    private Long nodeId;
 
-    public Clock(Integer id) {
+    public Clock(Long id) {
         this.nodeId = id;
         this.vector.put(id, 0);
     }
 
     @Override
-    public int getNodeId() {
+    public Long getNodeId() {
         return nodeId;
     }
 
     @Override
-    public void setNodeId(int clientId) {
+    public void setNodeId(Long clientId) {
         this.nodeId = clientId;
     }
 
     @Override
-    public void addNode(Integer id, Integer state) {
+    public void addNode(Long id, Integer state) {
         if (!vector.containsKey(id)) {
             vector.put(id, state);
         }
     }
 
     @Override
-    public Map<Integer, Integer> getVector() {
+    public Map<Long, Integer> getVector() {
         return vector;
     }
 
     @Override
-    public void setVector(Map<Integer, Integer> vector) {
+    public void setVector(Map<Long, Integer> vector) {
         this.vector = vector;
     }
 
