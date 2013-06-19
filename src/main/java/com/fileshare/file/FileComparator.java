@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Diff {
+public class FileComparator {
     private final File original;
     private final File revised;
 
-    public Diff(File original, File revised) {
+    public FileComparator(File original, File revised) {
         this.original = original;
         this.revised = revised;
     }
