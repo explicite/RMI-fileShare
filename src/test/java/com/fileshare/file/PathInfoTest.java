@@ -15,29 +15,29 @@ import static org.junit.Assert.assertTrue;
  *         Data: 13.06.13
  */
 public class PathInfoTest {
-    Path p;
-    PathInfo pi;
+    File p;
+    FileInfo pi;
 
     @Before
     public void preparePath() {
-        p = new File("./").toPath();
+        p = new File("./");
     }
 
     @Test
     public void createEventKindTest() {
-        pi = new PathInfo(p, StandardWatchEventKinds.ENTRY_CREATE);
-        assertTrue(pi.getFlag() == PathInfo.FLAG_CREATED);
+        pi = new FileInfo(p, StandardWatchEventKinds.ENTRY_CREATE);
+        assertTrue(pi.getFlag() == FileInfo.FLAG_CREATED);
     }
 
     @Test
     public void modifyEventKindTest() {
-        pi = new PathInfo(p, StandardWatchEventKinds.ENTRY_MODIFY);
-        assertTrue(pi.getFlag() == PathInfo.FLAG_MODIFIED);
+        pi = new FileInfo(p, StandardWatchEventKinds.ENTRY_MODIFY);
+        assertTrue(pi.getFlag() == FileInfo.FLAG_MODIFIED);
     }
 
     @Test
     public void deleteEventKindTest() {
-        pi = new PathInfo(p, StandardWatchEventKinds.ENTRY_DELETE);
-        assertTrue(pi.getFlag() == PathInfo.FLAG_DELETED);
+        pi = new FileInfo(p, StandardWatchEventKinds.ENTRY_DELETE);
+        assertTrue(pi.getFlag() == FileInfo.FLAG_DELETED);
     }
 }
