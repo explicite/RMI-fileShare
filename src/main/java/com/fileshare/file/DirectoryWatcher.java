@@ -69,7 +69,8 @@ public class DirectoryWatcher extends IDirectoryWatch {
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent<Path> ev = cast(event);
                 File name = ev.context().toFile();
-                changedItems.add(new FileInfo(name, ev.kind()));
+                while (!checkIsFileUsed(name))
+                    changedItems.add(new FileInfo(name, ev.kind()));
             }
 
             boolean valid = key.reset();
@@ -90,6 +91,18 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 e.printStackTrace();
             }*/
         }
+    }
+
+    public boolean checkIsFileUsed(File file) {
+        boolean isFileUnlocked = false;
+        try {
+            org.apache.commons.io.FileUtils.touch(file);
+            isFileUnlocked = true;
+        } catch (IOException e) {
+            isFileUnlocked = false;
+        }
+
+        return isFileUnlocked;
     }
 
     @Override
