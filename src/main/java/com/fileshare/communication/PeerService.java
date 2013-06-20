@@ -100,14 +100,34 @@ public class PeerService {
             for (FileInfo path : paths) {
                 if (path.getFlag() == FileInfo.FLAG_CREATED)
                     try {
+                        while (!checkIsFileUsed(path.getFile())) {
+                            Thread.sleep(500);
+                        }
+
                         broadcast(path.getFile());
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
             }
 
         }
+
+        public boolean checkIsFileUsed(File file) {
+            boolean isFileUnlocked = false;
+            try {
+                org.apache.commons.io.FileUtils.touch(file);
+                isFileUnlocked = true;
+            } catch (IOException e) {
+                isFileUnlocked = false;
+            }
+
+            return isFileUnlocked;
+        }
+
     }
+
 
     //TODO only for KMich ;>
     public static void main(String[] args) throws Exception {
