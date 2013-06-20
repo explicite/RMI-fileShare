@@ -81,10 +81,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
                     break;
                 }
             }
-            if (changedItems.size() > 0)
-                while (!checkIsFileUsed(changedItems.get(0).getFile())) {
-
-                }
 
             if (changedItems.size() > 0)
                 sendChanges(changedItems);
