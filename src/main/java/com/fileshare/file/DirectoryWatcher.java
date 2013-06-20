@@ -69,8 +69,8 @@ public class DirectoryWatcher extends IDirectoryWatch {
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent<Path> ev = cast(event);
                 File name = ev.context().toFile();
-                while (!checkIsFileUsed(name))
-                    changedItems.add(new FileInfo(name, ev.kind()));
+
+                changedItems.add(new FileInfo(name, ev.kind()));
             }
 
             boolean valid = key.reset();
@@ -81,6 +81,10 @@ public class DirectoryWatcher extends IDirectoryWatch {
                     break;
                 }
             }
+            if (changedItems.size() > 0)
+                while (!checkIsFileUsed(changedItems.get(0).getFile())) {
+
+                }
 
             if (changedItems.size() > 0)
                 sendChanges(changedItems);
