@@ -59,7 +59,7 @@ public class Clock implements IClock {
     public void incrementClock() {
         if (vector.containsKey(this.nodeId)) {
             vector.put(this.nodeId, (vector.get(this.nodeId) + 1));
-            logger.info("Clock increment");
+            logger.info(this.toString());
         }
     }
 

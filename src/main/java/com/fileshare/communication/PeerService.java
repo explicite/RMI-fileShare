@@ -81,6 +81,7 @@ public class PeerService {
         //TODO only for KMich ;>
         public void broadcast(File file) throws IOException {
             for (Connection connection : connections) {
+                clock.incrementClock();
                 logger.info("Uploading file:\nName: " + file.getName()
                         + "\nFrom: " + address.toString()
                         + " To: " + connection.getAddress());
@@ -98,10 +99,8 @@ public class PeerService {
             ArrayList<FileInfo> paths = (ArrayList<FileInfo>) arg;
             clock.incrementClock();
             for (FileInfo path : paths) {
-                if (path.getFlag() == FileInfo.FLAG_CREATED)
+//                if (path.getFlag() == FileInfo.FLAG_CREATED)
                     try {
-
-
                         broadcast(path.getFile());
                     } catch (IOException e) {
                         e.printStackTrace();
