@@ -49,9 +49,10 @@ public class PeerService {
         public Peer(String name) throws RemoteException, AlreadyBoundException {
             super();
             this.address = new Address(name);
+            clock = new Clock(address.toString());
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
-            this.directoryWatcher = new DirectoryWatcher("./", 1, new Clock(address.toString()));
+            this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
             new Thread(directoryWatcher).start();
         }
