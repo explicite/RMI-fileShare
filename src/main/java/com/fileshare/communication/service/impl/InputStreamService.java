@@ -45,6 +45,7 @@ public class InputStreamService implements IInputStreamService {
     @Override
     public void close() throws IOException, RemoteException {
         in.close();
+        in.reset();
     }
 
     @Override

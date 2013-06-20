@@ -63,14 +63,14 @@ public class Connection {
         out.close();
     }
 
-    public void upload(File src, File dest) throws IOException {
+    public void upload(File src) throws IOException {
         copy(new FileInputStream(src),
-                peer.getOutputStream(dest));
+                peer.getOutputStream(src));
     }
 
-    public void download(File src, File dest) throws IOException {
-        copy(peer.getInputStream(src),
-                new FileOutputStream(dest));
+    public void download(File destination) throws IOException {
+        copy(peer.getInputStream(destination),
+                new FileOutputStream(destination));
     }
 
     public Address getAddress() {

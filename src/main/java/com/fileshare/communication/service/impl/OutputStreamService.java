@@ -39,6 +39,7 @@ public class OutputStreamService implements IOutputStreamService {
     @Override
     public void close() throws IOException, RemoteException {
         out.close();
+        out.flush();
     }
 
     @Override
