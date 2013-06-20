@@ -44,23 +44,32 @@ public class Connection {
 
     private void copy(java.io.InputStream in, java.io.OutputStream out)
             throws IOException {
+        try {
+            if (in instanceof InputStream) {
+                ((InputStream) in).transfer(out);
+                in.close();
+                out.close();
+                return;
+            }
 
-        if (in instanceof InputStream) {
-            ((InputStream) in).transfer(out);
-            return;
-        }
+            if (out instanceof OutputStream) {
+                ((OutputStream) out).transfer(in);
+                in.close();
+                out.close();
+                return;
+            }
 
-        if (out instanceof OutputStream) {
-            ((OutputStream) out).transfer(in);
-            return;
+            byte[] b = new byte[BUF_SIZE];
+            int len;
+            while ((len = in.read(b)) >= 0) {
+                out.write(b, 0, len);
+            }
+        } finally {
+            if (in != null)
+                in.close();
+            if (out != null)
+                out.close();
         }
-        byte[] b = new byte[BUF_SIZE];
-        int len;
-        while ((len = in.read(b)) >= 0) {
-            out.write(b, 0, len);
-        }
-        in.close();
-        out.close();
     }
 
     public void upload(File src) throws IOException {
