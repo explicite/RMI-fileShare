@@ -84,11 +84,11 @@ public class DirectoryWatcher extends IDirectoryWatch {
             if (changedItems.size() > 0)
                 sendChanges(changedItems);
 
-            try {
+           /* try {
                 Thread.sleep(interval * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
