@@ -47,15 +47,11 @@ public class Connection {
         try {
             if (in instanceof InputStream) {
                 ((InputStream) in).transfer(out);
-                in.close();
-                out.close();
                 return;
             }
 
             if (out instanceof OutputStream) {
                 ((OutputStream) out).transfer(in);
-                in.close();
-                out.close();
                 return;
             }
 
