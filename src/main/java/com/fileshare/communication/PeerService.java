@@ -44,12 +44,14 @@ public class PeerService {
         Address address;
         BindingHandler bindingHandler;
         DirectoryWatcher directoryWatcher;
+        Clock clock;
+
         public Peer(String name) throws RemoteException, AlreadyBoundException {
             super();
             this.address = new Address(name);
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
-            this.directoryWatcher = new DirectoryWatcher("./", 1, new Clock(System.currentTimeMillis()));
+            this.directoryWatcher = new DirectoryWatcher("./", 1, new Clock(address.toString()));
             this.directoryWatcher.addObserver(Peer.this);
             new Thread(directoryWatcher).start();
         }
@@ -93,11 +95,11 @@ public class PeerService {
         @Override
         public void update(Observable o, Object arg) {
             ArrayList<FileInfo> paths = (ArrayList<FileInfo>) arg;
-
+            clock.incrementClock();
             for (FileInfo path : paths) {
                 if (path.getFlag() == FileInfo.FLAG_CREATED)
                     try {
-                        broadcast(new File(path.getFile().toString()));
+                        broadcast(path.getFile());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

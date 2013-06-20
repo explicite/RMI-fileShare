@@ -1,5 +1,9 @@
 package com.fileshare.time;
 
+import com.fileshare.communication.PeerService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,38 +14,39 @@ import java.util.Map;
  */
 
 public class Clock implements IClock {
-    private Map<Long, Integer> vector = new HashMap<>();
-    private Long nodeId;
+    private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
+    private Map<String, Integer> vector = new HashMap<String, Integer>();
+    private String nodeId;
 
-    public Clock(Long id) {
+    public Clock(String id) {
         this.nodeId = id;
         this.vector.put(id, 0);
     }
 
     @Override
-    public Long getNodeId() {
+    public String getNodeId() {
         return nodeId;
     }
 
     @Override
-    public void setNodeId(Long clientId) {
+    public void setNodeId(String clientId) {
         this.nodeId = clientId;
     }
 
     @Override
-    public void addNode(Long id, Integer state) {
+    public void addNode(String id, Integer state) {
         if (!vector.containsKey(id)) {
             vector.put(id, state);
         }
     }
 
     @Override
-    public Map<Long, Integer> getVector() {
+    public Map<String, Integer> getVector() {
         return vector;
     }
 
     @Override
-    public void setVector(Map<Long, Integer> vector) {
+    public void setVector(Map<String, Integer> vector) {
         this.vector = vector;
     }
 
@@ -54,6 +59,7 @@ public class Clock implements IClock {
     public void incrementClock() {
         if (vector.containsKey(this.nodeId)) {
             vector.put(this.nodeId, (vector.get(this.nodeId) + 1));
+            logger.info("Clock increment");
         }
     }
 
@@ -75,9 +81,9 @@ public class Clock implements IClock {
             Iterator it = current.vector.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                    if (!((Integer) pairs.getValue() <= this.vector.get(pairs.getKey()))) {
-                        return false;
-                    }
+                if (!((Integer) pairs.getValue() <= this.vector.get(pairs.getKey()))) {
+                    return false;
+                }
                 it.remove();
             }
             return true;
@@ -117,5 +123,13 @@ public class Clock implements IClock {
         // TODO : compare and update vector clock
     }
 
+    @Override
+    public String toString() {
+        String toString = "";
+        for (Map.Entry<String, Integer> entry : vector.entrySet()) {
+            toString += entry.getKey() + "=>" + entry.getValue() + "\n";
+        }
+        return toString;
+    }
 }
 
