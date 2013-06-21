@@ -67,8 +67,12 @@ public class Connection {
     }
 
     public void upload(File src) throws IOException {
+        FileInputStream fiSrc = new FileInputStream(src);
+        java.io.OutputStream fiOut = peer.getOutputStream(src);
         copy(new FileInputStream(src),
                 peer.getOutputStream(src));
+        fiSrc.close();
+        fiOut.close();
     }
 
     public void download(File destination) throws IOException {

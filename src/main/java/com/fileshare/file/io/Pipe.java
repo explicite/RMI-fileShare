@@ -44,11 +44,6 @@ public class Pipe implements Serializable {
     protected void finalize() {
         if (isOutputRegistration)
             registry.remove(key);
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void writeObject(ObjectOutputStream out) throws
