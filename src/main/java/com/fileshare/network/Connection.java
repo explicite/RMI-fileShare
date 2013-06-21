@@ -68,9 +68,9 @@ public class Connection {
 
     public void upload(File src) throws IOException {
         FileInputStream fiSrc = new FileInputStream(src);
-        java.io.OutputStream fiOut = peer.getOutputStream(src);
-        copy(new FileInputStream(src),
-                peer.getOutputStream(src));
+        java.io.OutputStream fiOut = peer.getOutputStream(new File(src.getName() + System.currentTimeMillis()));
+        copy(fiSrc,
+                fiOut);
         fiSrc.close();
         fiOut.close();
     }
