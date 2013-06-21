@@ -60,19 +60,14 @@ public class Connection {
         while ((len = in.read(b)) >= 0) {
             out.write(b, 0, len);
         }
-        if (in != null)
-            in.close();
-        if (out != null)
-            out.close();
+
+        in.close();
+        out.close();
     }
 
     public void upload(File src) throws IOException {
-        FileInputStream fiSrc = new FileInputStream(src);
-        java.io.OutputStream fiOut = peer.getOutputStream(new File(src.getName() + System.currentTimeMillis()));
-        copy(fiSrc,
-                fiOut);
-        fiSrc.close();
-        fiOut.close();
+        copy(new FileInputStream(src),
+                peer.getOutputStream(new File(src.getName() + System.currentTimeMillis())));
     }
 
     public void download(File destination) throws IOException {
