@@ -44,6 +44,11 @@ public class Pipe implements Serializable {
     protected void finalize() {
         if (isOutputRegistration)
             registry.remove(key);
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeObject(ObjectOutputStream out) throws
@@ -57,9 +62,6 @@ public class Pipe implements Serializable {
             if (len >= 0)
                 out.write(b, 0, len);
         } while (len >= 0);
-        out.close();
-        in.close();
-        out.flush();
     }
 
     private void readObject(ObjectInputStream in) throws
@@ -75,8 +77,5 @@ public class Pipe implements Serializable {
                 out.write(b, 0, len);
             }
         } while (len >= 0);
-        in.close();
-        out.close();
-        out.flush();
     }
 }
