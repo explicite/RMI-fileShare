@@ -52,9 +52,9 @@ public class PeerService {
             clock = new Clock(address.toString());
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
-            this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
+            /*this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
-            new Thread(directoryWatcher).start();
+            new Thread(directoryWatcher).start();*/
         }
 
         public void start() throws Exception {
@@ -80,7 +80,6 @@ public class PeerService {
 
         //TODO only for KMich ;>
         public void broadcast(final File file) throws IOException {
-            file.setReadOnly();
             for (Connection connection : connections) {
                 clock.incrementClock();
                 logger.info("Uploading file:\nName: " + file.getName()

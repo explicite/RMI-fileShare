@@ -45,7 +45,6 @@ public class Connection {
     private void copy(java.io.InputStream in, java.io.OutputStream out)
             throws IOException {
 
-
         if (in instanceof InputStream) {
             ((InputStream) in).transfer(out);
             return;
