@@ -4,10 +4,7 @@ import com.fileshare.communication.PeerService;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -17,7 +14,7 @@ import java.rmi.registry.Registry;
  * @author Jan Paw
  *         Date: 6/12/13
  */
-public class Connection {
+public class Connection implements Serializable {
     public final static int BUF_SIZE = 1024 * 64;
     public final static int TIMEOUT = 2000;
     private Address address;
@@ -47,12 +44,12 @@ public class Connection {
 
         if (in instanceof InputStream) {
             ((InputStream) in).transfer(out);
-            return;
+            //return;
         }
 
         if (out instanceof OutputStream) {
             ((OutputStream) out).transfer(in);
-            return;
+            //return;
         }
         byte[] b = new byte[BUF_SIZE];
         int len;
