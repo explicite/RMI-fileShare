@@ -79,7 +79,7 @@ public class PeerService {
         }
 
         //TODO only for KMich ;>
-        public void broadcast(File file) throws IOException {
+        public void broadcast(final File file) throws IOException {
             for (Connection connection : connections) {
                 clock.incrementClock();
                 logger.info("Uploading file:\nName: " + file.getName()
@@ -87,8 +87,12 @@ public class PeerService {
                         + " To: " + connection.getAddress());
                 long len = file.length();
                 long t = System.currentTimeMillis();
-                connection.upload(file, new File(file.getName() + System.currentTimeMillis()));
+                connection.upload(file);
                 t = (System.currentTimeMillis() - t) / 1000;
+
+                if (t <= 0)
+                    t = Long.MIN_VALUE;
+
                 logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
                         " MB/s");
             }
@@ -99,20 +103,14 @@ public class PeerService {
             ArrayList<FileInfo> paths = (ArrayList<FileInfo>) arg;
             clock.incrementClock();
             for (FileInfo path : paths) {
-//                if (path.getFlag() == FileInfo.FLAG_CREATED)
-                    try {
-                        broadcast(path.getFile());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    broadcast(path.getFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
-
-
-
     }
-
 
     //TODO only for KMich ;>
     public static void main(String[] args) throws Exception {
