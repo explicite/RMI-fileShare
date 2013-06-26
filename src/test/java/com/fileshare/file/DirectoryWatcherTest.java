@@ -21,10 +21,14 @@ public class DirectoryWatcherTest {
     EventObserver eventObserver;
     File testFile;
     Clock clock;
+    private File testDirectory;
 
     @Before
     public void createDirectoryWatcher() {
         clock = new Clock("aa");
+        testDirectory = new File("./test");
+        assertTrue(testDirectory.mkdir());
+
         directoryWatcher = new DirectoryWatcher("./test", 3, clock);
 
         eventObserver = new EventObserver();
@@ -57,6 +61,7 @@ public class DirectoryWatcherTest {
     @After
     public void clean() {
         testFile.delete();
+        testDirectory.delete();
     }
 
     private class EventObserver implements Observer {
