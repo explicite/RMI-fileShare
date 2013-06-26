@@ -15,11 +15,14 @@ import java.util.LinkedList;
  */
 public class ConnectionPool extends LinkedList<Connection> implements Runnable, ClockObservable {
     private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
+    private static final long serialVersionUID = -6447733757552047292L;
     private ClockObserver clock;
+    volatile boolean inAction = false;
 
     public ConnectionPool(ClockObserver clock, Address address) {
         super();
         this.clock = clock;
+        inAction = true;
         for (Connection connection : Scanner.scan()) {
             try {
                 connection.fusion(address);
@@ -29,13 +32,14 @@ public class ConnectionPool extends LinkedList<Connection> implements Runnable, 
             this.add(connection);
             clock.add(connection.getAddress());
         }
+        inAction = false;
     }
 
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             for (Connection connection : this)
-                if (!connection.isReachable(Connection.TIMEOUT)) {
+                if (!connection.isReachable(Connection.TIMEOUT * 10)) {
                     this.remove(connection);
                     clock.remove(connection.getAddress());
                     logger.info("Lost connection with: " + connection.getAddress());
