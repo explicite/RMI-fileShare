@@ -134,7 +134,7 @@ public class PeerService {
             }
         }
 
-        Thread.sleep(5 * 60 * 1000);
-        peer.stop();
+        /*Thread.sleep(5 * 60 * 1000);
+        peer.stop();*/
     }
 }
