@@ -51,10 +51,10 @@ public class PeerService {
             this.address = new Address(name);
             clock = new Clock(address.toString());
             logger.info("New peer: " + name);
-            this.bindingHandler = new BindingHandler(name, this);
+            /*this.bindingHandler = new BindingHandler(name, this);
             this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
-            new Thread(directoryWatcher).start();
+            new Thread(directoryWatcher).start();*/
         }
 
         public void start() throws Exception {
