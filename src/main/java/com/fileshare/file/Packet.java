@@ -16,7 +16,9 @@ public class Packet implements Serializable {
         this.name = file.getName();
         try {
             data = new byte[(int) (file.length())];
-            (new FileInputStream(file)).read(data);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            fileInputStream.read(data);
+            fileInputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,6 +31,8 @@ public class Packet implements Serializable {
     public void writeTo(java.io.OutputStream out) {
         try {
             out.write(data);
+            out.flush();
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

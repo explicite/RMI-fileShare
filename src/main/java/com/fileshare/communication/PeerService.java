@@ -56,9 +56,9 @@ public class PeerService {
             clock = new Clock(address.toString());
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
-            /*this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
+            this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
-            new Thread(directoryWatcher).start();*/
+            new Thread(directoryWatcher).start();
         }
 
         public void start() throws Exception {
@@ -91,11 +91,13 @@ public class PeerService {
                         + " To: " + connection.getAddress());
                 long len = file.length();
                 long t = System.currentTimeMillis();
-                connection.send(file);
+                connection.upload(new File(file.getName()));
                 t = (System.currentTimeMillis() - t) / 1000;
 
                 if (t <= 0)
-                    t = file.length();
+                    t = Long.MAX_VALUE;
+                if (len <= 0)
+                    len = 1;
 
                 logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
                         " MB/s");
@@ -140,15 +142,12 @@ public class PeerService {
             try {
                 RandomAccessFile f = new RandomAccessFile("1MB", "rw");
                 f.setLength(1024 * 1024);
+                f.close();
                 File testFile = new File("1MB");
-                peer.broadcast(testFile);
                 peer.broadcast(testFile);
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
-
-        /*Thread.sleep(5 * 60 * 1000);
-        peer.stop();*/
     }
 }
