@@ -24,13 +24,20 @@ public class DirectoryWatcherTest {
 
     @Before
     public void createDirectoryWatcher() {
-       /* clock = new Clock(1l);
+        clock = new Clock("aa");
         directoryWatcher = new DirectoryWatcher("./test", 1, clock);
 
         eventObserver = new EventObserver();
         directoryWatcher.addObserver(eventObserver);
 
-        new Thread(directoryWatcher).start();*/
+        new Thread(directoryWatcher).start();
+    }
+
+    @Test
+    public void doesItEvenWorkTest(){
+        File dummy = DummyFile.generateFile("./test", 5096);
+        while(eventObserver.getCaughtEvent() == 0){}
+        System.out.println(eventObserver.caughtEvent);
     }
 
     @Test

@@ -70,7 +70,6 @@ public class DirectoryWatcher extends IDirectoryWatch {
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent<Path> ev = cast(event);
                 File name = ev.context().toFile();
-
                 changedItems.add(new FileInfo(name, ev.kind()));
             }
 
