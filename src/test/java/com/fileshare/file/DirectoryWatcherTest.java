@@ -6,9 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -27,8 +25,14 @@ public class DirectoryWatcherTest {
     public void createDirectoryWatcher() {
         clock = new Clock("aa");
         testDirectory = new File("./test");
-        if (testDirectory.exists())
+
+        if (testDirectory.exists()) {
+            File[] files = testDirectory.listFiles();
+            for (File file : files) {
+                file.delete();
+            }
             testDirectory.delete();
+        }
         assertTrue(testDirectory.mkdir());
 
         directoryWatcher = new DirectoryWatcher("./test", 3, clock);
@@ -58,6 +62,22 @@ public class DirectoryWatcherTest {
             testFile = DummyFile.generateFile("./test", 1024);
         }
         assertTrue(eventObserver.getCaughtEvent() == FileInfo.FLAG_CREATED);
+    }
+
+    @Test
+    public void ignoreTest() {
+        Set<String> ignoreList = new HashSet<>();
+        ignoreList.add("1MB");
+        directoryWatcher.addFilesToIgnore(ignoreList);
+        testFile = DummyFile.generateFile("./test", 1024);
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(directoryWatcher.getFilesToIgnore().size() == 0);
     }
 
     @After

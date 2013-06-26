@@ -7,10 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Kamil Sikora
@@ -25,6 +22,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
     private final Clock clock;
     private ArrayList<FileInfo> changesBuffer;
     private long lastUpdateTime;
+    private volatile  Set<String> filesToIgnore;
 
     /**
      * @param watchedDir ścieżka do obserwowania.
@@ -39,6 +37,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
         this.clock = clock;
         this.changesBuffer = new ArrayList<>();
         this.newChangesBuffer = new HashMap<String, FileInfo>();
+        this.filesToIgnore = new HashSet<>();
         try {
             this.watchService = FileSystems.getDefault().newWatchService();
             WatchKey key = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
@@ -114,7 +113,12 @@ public class DirectoryWatcher extends IDirectoryWatch {
                         for (WatchEvent<?> event : events) {
                             WatchEvent<Path> eventItem = cast(event);
                             logger.info(path.getFileName() + " event: #" + event.count() + "," + event.kind() + " File=" + event.context());
-                            changedItems.put(eventItem.context().toFile().getName(), new FileInfo(eventItem.context().toFile(), event.kind()));
+                            String fileName = eventItem.context().toFile().getName();
+                            if (filesToIgnore.contains(fileName)) {
+                                filesToIgnore.remove(fileName);
+                                continue;
+                            } else
+                                changedItems.put(fileName, new FileInfo(eventItem.context().toFile(), event.kind()));
                         }
                         addToBuffer(changedItems);
                     }
@@ -178,9 +182,17 @@ public class DirectoryWatcher extends IDirectoryWatch {
     }
 
     @Override
+    public void addFilesToIgnore(Set<String> fileList) {
+        filesToIgnore.addAll(fileList);
+    }
+
+    @Override
     public void run() {
 //        this.watchChanges();
         watchDir();
     }
 
+    public Set<String> getFilesToIgnore() {
+        return filesToIgnore;
+    }
 }
