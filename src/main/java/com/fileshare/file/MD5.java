@@ -1,5 +1,7 @@
 package com.fileshare.file;
 
+import com.fileshare.file.io.Pipe;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -12,7 +14,7 @@ class MD5 {
     private static byte[] createChecksum(String fileName) throws Exception {
         InputStream inputStream = new FileInputStream(fileName);
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[Pipe.BUF_SIZE];
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
         int numRead;
 

@@ -12,7 +12,7 @@ import java.util.Hashtable;
  *         Date: 6/10/13
  */
 public class Pipe implements Serializable {
-    private final static int BUF_SIZE = 1024 * 64;
+    public final static int BUF_SIZE = 1024 * 64;
     private static int keySeed = 0;
     private static final Hashtable<Integer, java.io.OutputStream>
             registry = new Hashtable<>();

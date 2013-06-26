@@ -1,6 +1,7 @@
 package com.fileshare.network;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -10,7 +11,7 @@ import java.net.UnknownHostException;
  * @author Jan Paw
  *         Date: 6/12/13
  */
-public class Address {
+public class Address implements Serializable {
     public final static int PORT = 1099;
     private InetAddress inetAddress;
     private String name;
