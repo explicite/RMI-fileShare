@@ -4,6 +4,7 @@ import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
 import com.fileshare.file.DirectoryWatcher;
 import com.fileshare.file.FileInfo;
+import com.fileshare.file.Packet;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 import com.fileshare.network.Address;
@@ -38,6 +39,9 @@ public class PeerService {
 
         public java.io.InputStream getInputStream(File f)
                 throws IOException, RemoteException;
+
+        public void receive(Packet packet)
+                throws RemoteException;
     }
 
     public static class Peer extends UnicastRemoteObject implements IPeer, Observer {
@@ -87,7 +91,7 @@ public class PeerService {
                         + " To: " + connection.getAddress());
                 long len = file.length();
                 long t = System.currentTimeMillis();
-                connection.upload(file);
+                connection.send(file);
                 t = (System.currentTimeMillis() - t) / 1000;
 
                 if (t <= 0)
@@ -110,6 +114,15 @@ public class PeerService {
                 }
             }
         }
+
+        @Override
+        public void receive(Packet packet) throws RemoteException {
+            try {
+                packet.writeTo(new FileOutputStream(packet.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //TODO only for KMich ;>
@@ -128,6 +141,7 @@ public class PeerService {
                 RandomAccessFile f = new RandomAccessFile("1MB", "rw");
                 f.setLength(1024 * 1024);
                 File testFile = new File("1MB");
+                peer.broadcast(testFile);
                 peer.broadcast(testFile);
             } catch (Exception e) {
                 System.err.println(e);

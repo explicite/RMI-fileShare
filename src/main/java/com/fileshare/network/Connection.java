@@ -1,6 +1,7 @@
 package com.fileshare.network;
 
 import com.fileshare.communication.PeerService;
+import com.fileshare.file.Packet;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 
@@ -63,6 +64,10 @@ public class Connection implements Serializable {
     public void upload(File src) throws IOException {
         copy(new FileInputStream(src),
                 peer.getOutputStream(new File(src.getName() + System.currentTimeMillis())));
+    }
+
+    public void send(File src) throws IOException {
+        peer.receive(new Packet(src));
     }
 
     public void download(File destination) throws IOException {
