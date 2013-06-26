@@ -56,8 +56,8 @@ public class Connection implements Serializable {
             out.write(b, 0, len);
         }
 
-        in.close();
         out.close();
+        in.close();
     }
 
     public void upload(File src) throws IOException {

@@ -36,7 +36,6 @@ public class InputStream extends java.io.InputStream implements Serializable {
     }
 
     public void close() throws IOException {
-        in.close();
         super.close();
     }
 }
