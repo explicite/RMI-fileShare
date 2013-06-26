@@ -79,4 +79,9 @@ public class Connection implements Serializable {
     public Address getAddress() {
         return address;
     }
+
+    public synchronized boolean delete(File f) {
+        File local = new File(f.getName()); // czy to zadzia?a?
+        return local.delete();
+    }
 }

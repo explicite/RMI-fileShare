@@ -21,7 +21,7 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -63,7 +63,7 @@ public class PeerService {
             this.bindingHandler = new BindingHandler(name, this);
             this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
-            new Thread(directoryWatcher).start();
+            this.directoryWatcher.watchDir();
         }
 
         public void start() throws Exception {
@@ -88,8 +88,17 @@ public class PeerService {
         }
 
         @Override
-        public void delete(File f) throws IOException, RemoteException {
+        public void delete(final File f) throws IOException, RemoteException {
+            Parallel.For(connections.size(), connections, new Parallel.Operation<Connection>() {
+                @Override
+                public void perform(Connection connection) {
+                    clock.incrementClock();
+                    logger.info("Deleting file:\nName: " + f.getName()
+                            + " From: " + connection.getAddress());
 
+                    connection.delete(f);
+                }
+            });
         }
 
         //TODO only for KMich ;>
@@ -121,13 +130,22 @@ public class PeerService {
 
         @Override
         public void update(Observable o, Object arg) {
-            ArrayList<FileInfo> paths = (ArrayList<FileInfo>) arg;
+            HashMap<String, FileInfo> paths = (HashMap<String, FileInfo>) arg;
             clock.incrementClock();
-            for (FileInfo path : paths) {
-                try {
-                    broadcast(path.getFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (FileInfo fileInfo : paths.values()) {
+                if (fileInfo.getFlag() == FileInfo.FLAG_DELETED) {
+                    try {
+                        delete(fileInfo.getFile());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        broadcast(fileInfo.getFile());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

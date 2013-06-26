@@ -7,7 +7,10 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Kamil Sikora
@@ -17,6 +20,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(PeerService.class.getName());
     private final Map<WatchKey, Path> keys;
+    private final HashMap<String, FileInfo> newChangesBuffer;
     private Path path;
     private final Clock clock;
     private ArrayList<FileInfo> changesBuffer;
@@ -34,6 +38,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
         this.path = new File(watchedDir).toPath();
         this.clock = clock;
         this.changesBuffer = new ArrayList<>();
+        this.newChangesBuffer = new HashMap<String, FileInfo>();
         try {
             this.watchService = FileSystems.getDefault().newWatchService();
             WatchKey key = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
@@ -55,6 +60,12 @@ public class DirectoryWatcher extends IDirectoryWatch {
         ArrayList<FileInfo> changedItems;
         // You spin me round, round baby... infinite loop
         while (true) {
+            try {
+                Thread.sleep(1000 * interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             changedItems = new ArrayList<>();
             WatchKey key;
             try {
@@ -70,32 +81,70 @@ public class DirectoryWatcher extends IDirectoryWatch {
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent<Path> ev = cast(event);
                 File name = ev.context().toFile();
-
                 changedItems.add(new FileInfo(name, ev.kind()));
             }
+
+            addToBuffer(changedItems);
 
             boolean valid = key.reset();
             if (!valid) {
                 keys.remove(key);
                 logger.info("Key removed" + key);
-                if (keys.isEmpty()) {
-                    break;
-                }
             }
 
-            addToBuffer(changedItems);
 
-            try {
-                Thread.sleep(interval * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+    }
+
+    public void watchDir() {
+        try {
+            final WatchKey bDirWatchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE);
+            new Thread(new Runnable() {
+                public void run() {
+
+                    while (true) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        HashMap<String, FileInfo> changedItems = new HashMap<>();
+                        List<WatchEvent<?>> events = bDirWatchKey.pollEvents();
+                        for (WatchEvent<?> event : events) {
+                            WatchEvent<Path> eventItem = cast(event);
+                            logger.info(path.getFileName() + " event: #" + event.count() + "," + event.kind() + " File=" + event.context());
+                            changedItems.put(eventItem.context().toFile().getName(), new FileInfo(eventItem.context().toFile(), event.kind()));
+                        }
+                        addToBuffer(changedItems);
+                    }
+                }
+            }).start();
+        } catch (IOException x) {
+            x.printStackTrace();
+        }
+    }
+
+    private boolean addToBuffer(HashMap<String, FileInfo> changedItems) {
+        if (lastUpdateTime == 0) {
+            lastUpdateTime = System.currentTimeMillis();
+            changesBuffer.clear();
+        } else if (System.currentTimeMillis() - lastUpdateTime > 5000) {
+            newChangesBuffer.putAll(changedItems);
+            sendChanges();
+            lastUpdateTime = 0;
+
+            return true;
+        }
+        newChangesBuffer.putAll(changedItems);
+
+        return false;
     }
 
     private boolean addToBuffer(ArrayList<FileInfo> changedItems) {
         if (lastUpdateTime == 0) {
             lastUpdateTime = System.currentTimeMillis();
+            changesBuffer.clear();
         } else if (System.currentTimeMillis() - lastUpdateTime > 5000) {
             changesBuffer.addAll(changedItems);
             sendChanges();
@@ -105,7 +154,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
         }
         changesBuffer.addAll(changedItems);
 
-        return false;  //To change body of created methods use File | Settings | File Templates.
+        return false;
     }
 
     public boolean checkIsFileUsed(File file) {
@@ -123,13 +172,14 @@ public class DirectoryWatcher extends IDirectoryWatch {
     @Override
     public void sendChanges() {
         setChanged();
-        notifyObservers(changesBuffer);
+        notifyObservers(newChangesBuffer.clone());
         clearChanged();
     }
 
     @Override
     public void run() {
-        watchChanges();
+//        this.watchChanges();
+        watchDir();
     }
 
 }
