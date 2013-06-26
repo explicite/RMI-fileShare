@@ -17,7 +17,7 @@ public enum Scanner {
     static volatile LinkedList<Connection> connections = new LinkedList<>();
     private static final Logger logger = LogManager.getLogger(PeerService.class.getName());
 
-    public static LinkedList<Connection> scan() {
+    public synchronized static LinkedList<Connection> scan() {
         addresses = new LinkedList<>();
         connections = new LinkedList<>();
         String localPrefix = "0.0.0.";
