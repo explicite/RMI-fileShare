@@ -33,7 +33,6 @@ public class ClockTest {
 
     @Test
     public void testIsGreater() throws Exception {
-
         String Id1 = "1";
         String Id2 = "2";
         Clock cl1 = new Clock(Id1);
