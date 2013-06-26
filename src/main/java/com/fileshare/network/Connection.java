@@ -81,7 +81,11 @@ public class Connection implements Serializable {
     }
 
     public synchronized boolean delete(File f) {
-        File local = new File(f.getName()); // czy to zadzia?a?
+        File local = new File(f.getName());
         return local.delete();
+    }
+
+    public void fusion(Address address) throws IOException {
+        peer.fusion(address);
     }
 }

@@ -1,6 +1,7 @@
 package com.fileshare.time;
 
 import com.fileshare.communication.PeerService;
+import com.fileshare.network.Address;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -129,7 +130,7 @@ public class Clock implements IClock {
                 Integer cl2 = this.vector.get(pairs.getKey());
                 if (!(cl1 <= cl2)) {
                     pairs.setValue(cl2);
-                } else if(cl1 > cl2) {
+                } else if (cl1 > cl2) {
                     this.vector.put((String) pairs.getKey(), cl1);
                 }
                 it.remove();
@@ -144,5 +145,17 @@ public class Clock implements IClock {
             toString += entry.getKey() + "=>" + entry.getValue() + "\n";
         }
         return toString;
+    }
+
+    @Override
+    public void add(Address address) {
+        vector.put(address.toString(), 0);
+        logger.info(this.toString());
+    }
+
+    @Override
+    public void remove(Address address) {
+        vector.remove(address.toString());
+        logger.info(this.toString());
     }
 }
