@@ -91,7 +91,7 @@ public class PeerService {
                         + " To: " + connection.getAddress());
                 long len = file.length();
                 long t = System.currentTimeMillis();
-                connection.upload(new File(file.getName()));
+                connection.upload(file);
                 t = (System.currentTimeMillis() - t) / 1000;
 
                 if (t <= 0)
