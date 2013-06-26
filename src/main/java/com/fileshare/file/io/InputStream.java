@@ -2,7 +2,8 @@ package com.fileshare.file.io;
 
 import com.fileshare.communication.service.IInputStreamService;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * @author Jan Paw
