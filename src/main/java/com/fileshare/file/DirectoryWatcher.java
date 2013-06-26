@@ -173,6 +173,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
     public void sendChanges() {
         setChanged();
         notifyObservers(newChangesBuffer.clone());
+        newChangesBuffer.clear();
         clearChanged();
     }
 

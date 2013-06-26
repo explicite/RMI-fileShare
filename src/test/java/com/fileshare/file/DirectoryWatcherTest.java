@@ -27,6 +27,8 @@ public class DirectoryWatcherTest {
     public void createDirectoryWatcher() {
         clock = new Clock("aa");
         testDirectory = new File("./test");
+        if (testDirectory.exists())
+            testDirectory.delete();
         assertTrue(testDirectory.mkdir());
 
         directoryWatcher = new DirectoryWatcher("./test", 3, clock);
@@ -74,6 +76,7 @@ public class DirectoryWatcherTest {
         @Override
         public void update(Observable o, Object arg) {
             HashMap<String, FileInfo> changes = (HashMap<String, FileInfo>) arg;
+            System.out.println("UPDATE + " + changes.size());
             for (FileInfo fileInfo : changes.values()) {
                 caughtEvent = fileInfo.getFlag();
             }
