@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @author Jan Paw
  *         Date: 6/26/13
  */
+@Deprecated
 public class Packet implements Serializable {
     private String name;
     private byte[] data;
