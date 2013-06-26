@@ -7,9 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Kamil Sikora
@@ -21,6 +19,8 @@ public class DirectoryWatcher extends IDirectoryWatch {
     private final Map<WatchKey, Path> keys;
     private Path path;
     private final Clock clock;
+    private ArrayList<FileInfo> changesBuffer;
+    private long lastUpdateTime;
 
     /**
      * @param watchedDir ścieżka do obserwowania.
@@ -33,6 +33,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
         this.keys = new HashMap<>();
         this.path = new File(watchedDir).toPath();
         this.clock = clock;
+        this.changesBuffer = new ArrayList<>();
         try {
             this.watchService = FileSystems.getDefault().newWatchService();
             WatchKey key = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
@@ -82,15 +83,29 @@ public class DirectoryWatcher extends IDirectoryWatch {
                 }
             }
 
-            if (changedItems.size() > 0)
-                sendChanges(changedItems);
+            addToBuffer(changedItems);
 
-           /* try {
+            try {
                 Thread.sleep(interval * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
+    }
+
+    private boolean addToBuffer(ArrayList<FileInfo> changedItems) {
+        if (lastUpdateTime == 0) {
+            lastUpdateTime = System.currentTimeMillis();
+        } else if (System.currentTimeMillis() - lastUpdateTime > 5000) {
+            changesBuffer.addAll(changedItems);
+            sendChanges();
+            lastUpdateTime = 0;
+
+            return true;
+        }
+        changesBuffer.addAll(changedItems);
+
+        return false;  //To change body of created methods use File | Settings | File Templates.
     }
 
     public boolean checkIsFileUsed(File file) {
@@ -106,9 +121,9 @@ public class DirectoryWatcher extends IDirectoryWatch {
     }
 
     @Override
-    public void sendChanges(ArrayList<FileInfo> files) {
+    public void sendChanges() {
         setChanged();
-        notifyObservers(files);
+        notifyObservers(changesBuffer);
         clearChanged();
     }
 
@@ -116,4 +131,5 @@ public class DirectoryWatcher extends IDirectoryWatch {
     public void run() {
         watchChanges();
     }
+
 }
