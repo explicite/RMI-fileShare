@@ -26,7 +26,6 @@ public class OutputStreamService implements IOutputStreamService, Serializable {
         return pipe.getKey();
     }
 
-
     @Override
     public void write(int bytes) throws IOException, RemoteException {
         out.write(bytes);

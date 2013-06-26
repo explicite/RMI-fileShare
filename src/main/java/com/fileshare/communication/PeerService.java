@@ -4,6 +4,7 @@ import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
 import com.fileshare.file.DirectoryWatcher;
 import com.fileshare.file.FileInfo;
+import com.fileshare.file.Packet;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
 import com.fileshare.network.Address;
@@ -38,6 +39,9 @@ public class PeerService {
 
         public java.io.InputStream getInputStream(File f)
                 throws IOException, RemoteException;
+
+        public void receive(Packet packet)
+                throws RemoteException;
     }
 
     public static class Peer extends UnicastRemoteObject implements IPeer, Observer {
@@ -91,7 +95,9 @@ public class PeerService {
                 t = (System.currentTimeMillis() - t) / 1000;
 
                 if (t <= 0)
-                    t = Long.MIN_VALUE;
+                    t = Long.MAX_VALUE;
+                if (len <= 0)
+                    len = 1;
 
                 logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
                         " MB/s");
@@ -108,6 +114,15 @@ public class PeerService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+
+        @Override
+        public void receive(Packet packet) throws RemoteException {
+            try {
+                packet.writeTo(new FileOutputStream(packet.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -127,14 +142,12 @@ public class PeerService {
             try {
                 RandomAccessFile f = new RandomAccessFile("1MB", "rw");
                 f.setLength(1024 * 1024);
+                f.close();
                 File testFile = new File("1MB");
                 peer.broadcast(testFile);
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
-
-        Thread.sleep(5 * 60 * 1000);
-        peer.stop();
     }
 }
