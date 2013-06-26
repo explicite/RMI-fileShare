@@ -145,7 +145,6 @@ public class PeerService {
         @Override
         public void update(Observable o, Object arg) {
             HashMap<String, FileInfo> paths = (HashMap<String, FileInfo>) arg;
-            clock.incrementClock();
             for (FileInfo fileInfo : paths.values()) {
                 if (fileInfo.getFlag() == FileInfo.FLAG_DELETED) {
                     try {
