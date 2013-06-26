@@ -2,6 +2,7 @@ package com.fileshare.communication;
 
 import com.fileshare.communication.service.impl.InputStreamService;
 import com.fileshare.communication.service.impl.OutputStreamService;
+import com.fileshare.concurrency.Parallel;
 import com.fileshare.file.DirectoryWatcher;
 import com.fileshare.file.FileInfo;
 import com.fileshare.file.Packet;
@@ -40,6 +41,10 @@ public class PeerService {
         public java.io.InputStream getInputStream(File f)
                 throws IOException, RemoteException;
 
+        public void delete(File f)
+                throws IOException, RemoteException;
+
+        @Deprecated
         public void receive(Packet packet)
                 throws RemoteException;
     }
@@ -82,26 +87,36 @@ public class PeerService {
             return new InputStream(new InputStreamService(new FileInputStream(f)));
         }
 
+        @Override
+        public void delete(File f) throws IOException, RemoteException {
+
+        }
+
         //TODO only for KMich ;>
         public void broadcast(final File file) throws IOException {
-            for (Connection connection : connections) {
-                clock.incrementClock();
-                logger.info("Uploading file:\nName: " + file.getName()
-                        + "\nFrom: " + address.toString()
-                        + " To: " + connection.getAddress());
-                long len = file.length();
-                long t = System.currentTimeMillis();
-                connection.upload(file);
-                t = (System.currentTimeMillis() - t) / 1000;
+            Parallel.For(connections.size(), connections, new Parallel.Operation<Connection>() {
+                @Override
+                public void perform(Connection connection) {
+                    clock.incrementClock();
+                    logger.info("Uploading file:\nName: " + file.getName()
+                            + "\nFrom: " + address.toString()
+                            + " To: " + connection.getAddress());
+                    long len = file.length();
+                    long t = System.currentTimeMillis();
+                    try {
+                        connection.upload(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    t = (System.currentTimeMillis() - t) / 1000;
 
-                if (t <= 0)
-                    t = Long.MAX_VALUE;
-                if (len <= 0)
-                    len = 1;
+                    if (len <= 0)
+                        len = 1;
 
-                logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
-                        " MB/s");
-            }
+                    logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
+                            " MB/s");
+                }
+            });
         }
 
         @Override

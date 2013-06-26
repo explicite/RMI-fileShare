@@ -22,7 +22,7 @@ public class Connection implements Serializable {
     private PeerService.IPeer peer = null;
     private Registry registry;
 
-    public boolean isReachable(int timeout) {
+    public synchronized boolean isReachable(int timeout) {
         return address.isReachable(timeout);
     }
 
@@ -61,16 +61,17 @@ public class Connection implements Serializable {
         in.close();
     }
 
-    public void upload(File src) throws IOException {
+    public synchronized void upload(File src) throws IOException {
         copy(new FileInputStream(src),
                 peer.getOutputStream(new File(src.getName() + System.currentTimeMillis())));
     }
 
-    public void send(File src) throws IOException {
+    @Deprecated
+    public synchronized void send(File src) throws IOException {
         peer.receive(new Packet(src));
     }
 
-    public void download(File destination) throws IOException {
+    public synchronized void download(File destination) throws IOException {
         copy(peer.getInputStream(destination),
                 new FileOutputStream(destination));
     }
