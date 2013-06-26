@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class ClockTest {
 
-    /*@Test
+    @Test
     public void testCreate() throws Exception {
         String Id1 = "1";
         Clock clock1 = new Clock(Id1);
@@ -28,7 +28,7 @@ public class ClockTest {
         cl1.addNode(Id2, 2);//cl1 = {1,2}
         cl2.addNode(Id1, 2);
         cl2.addNode(Id2, 1);//cl2 = {2,1}
-        Assert.assertTrue(cl1.equivalent(cl2));
+        Assert.assertTrue(cl2.equivalent(cl1));
     }
 
     @Test
@@ -114,5 +114,5 @@ public class ClockTest {
         c2.setVector(c1.getVector());
 
         Assert.assertEquals(c1.getVector(), c2.getVector());
-    }*/
+    }
 }

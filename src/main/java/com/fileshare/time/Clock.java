@@ -120,7 +120,21 @@ public class Clock implements IClock {
 
     @Override
     public void consolidate(Clock current) {
-        // TODO : compare and update vector clock
+        if (!current.equals(this)) {
+
+            Iterator it = current.vector.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry) it.next();
+                Integer cl1 = (Integer) pairs.getValue();
+                Integer cl2 = this.vector.get(pairs.getKey());
+                if (!(cl1 <= cl2)) {
+                    pairs.setValue(cl2);
+                } else if(cl1 > cl2) {
+                    this.vector.put((String) pairs.getKey(), cl1);
+                }
+                it.remove();
+            }
+        }
     }
 
     @Override
@@ -132,4 +146,3 @@ public class Clock implements IClock {
         return toString;
     }
 }
-
