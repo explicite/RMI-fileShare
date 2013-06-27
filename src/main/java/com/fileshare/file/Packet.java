@@ -15,25 +15,25 @@ public class Packet implements Serializable {
 
     public Packet(File file) {
         this.name = file.getName();
-        try {
-            data = new byte[(int) (file.length())];
-            FileInputStream fileInputStream = new FileInputStream(file);
-            fileInputStream.read(data);
-            //fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public String getName() {
         return name;
     }
 
+    public void readIn() {
+        try {
+            File file = new File(name);
+            data = new byte[(int) (file.length())];
+            (new FileInputStream(file)).read(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeTo(java.io.OutputStream out) {
         try {
             out.write(data);
-            //out.flush();
-            //out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
