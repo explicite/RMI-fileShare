@@ -116,32 +116,32 @@ public class PeerService {
         //TODO only for KMich ;>
         public void broadcast(final File file) throws IOException {
             if (connections.size() > 0) {
-                Parallel.For(connections.size(), connections, new Parallel.Operation<Connection>() {
-                    @Override
-                    public void perform(Connection connection) {
-                        clock.incrementClock();
-                        logger.info("Uploading file:\nName: " + file.getName()
-                                + "\nFrom: " + address.toString()
-                                + " To: " + connection.getAddress());
-                        long len = file.length();
-                        long t = System.currentTimeMillis();
-                        try {
-                            connection.send(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        t = (System.currentTimeMillis() - t) / 1000;
-
-                        if (len <= 0)
-                            len = 1;
-
-                        logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
-                                " MB/s");
+                for (Connection connection : connections) {
+                    //Parallel.For(connections.size(), connections, new Parallel.Operation<Connection>() {
+                    //@Override
+                    //public void perform(Connection connection) {
+                    clock.incrementClock();
+                    logger.info("Uploading file:\nName: " + file.getName()
+                            + "\nFrom: " + address.toString()
+                            + " To: " + connection.getAddress());
+                    long len = file.length();
+                    long t = System.currentTimeMillis();
+                    try {
+                        connection.send(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
+                    t = (System.currentTimeMillis() - t) / 1000;
+
+                    if (len <= 0)
+                        len = 1;
+
+                    logger.info("Upload: " + file.getName() + " witch " + (len / t / 1000000d) +
+                            " MB/s");
+                }
+                //});
             }
         }
-
 
         @Override
         public void update(Observable o, Object arg) {
@@ -198,6 +198,4 @@ public class PeerService {
             }
         }
     }
-
-
 }

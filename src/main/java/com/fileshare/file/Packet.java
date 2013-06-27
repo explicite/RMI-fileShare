@@ -19,7 +19,7 @@ public class Packet implements Serializable {
             data = new byte[(int) (file.length())];
             FileInputStream fileInputStream = new FileInputStream(file);
             fileInputStream.read(data);
-            fileInputStream.close();
+            //fileInputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,8 +32,8 @@ public class Packet implements Serializable {
     public void writeTo(java.io.OutputStream out) {
         try {
             out.write(data);
-            out.flush();
-            out.close();
+            //out.flush();
+            //out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
