@@ -46,14 +46,9 @@ public class PeerService {
         public void fusion(Address address)
                 throws IOException, RemoteException;
 
-        public void sentFileList(Set<String> fileList)
-                throws IOException, RemoteException;
-
         @Deprecated
         public void receive(Packet packet)
                 throws RemoteException;
-
-        public DirectoryWatcher getDirectoryWatcher();
     }
 
     public static class Peer extends UnicastRemoteObject implements IPeer, Observer {
@@ -70,9 +65,9 @@ public class PeerService {
             connections = new ConnectionPool(clock, address);
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
-            /*this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
+            this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
             this.directoryWatcher.addObserver(Peer.this);
-            this.directoryWatcher.watchDir();*/
+            this.directoryWatcher.watchDir();
         }
 
         public void start() throws Exception {
@@ -153,8 +148,6 @@ public class PeerService {
             HashMap<String, FileInfo> paths = (HashMap<String, FileInfo>) arg;
             Set<String> fileList = paths.keySet();
 
-            sentFileList(fileList);
-
             for (FileInfo fileInfo : paths.values()) {
                 if (fileInfo.getFlag() == FileInfo.FLAG_DELETED) {
                     try {
@@ -173,31 +166,12 @@ public class PeerService {
         }
 
         @Override
-        public void sentFileList(final Set<String> fileList) {
-            if (connections.size() > 0) {
-                Parallel.For(connections.size(), connections, new Parallel.Operation<Connection>() {
-                    @Override
-                    public void perform(Connection connection) {
-                        connection.uploadFileList(fileList);
-                    }
-                });
-            }
-
-
-        }
-
-        @Override
         public void receive(Packet packet) throws RemoteException {
             try {
                 packet.writeTo(new FileOutputStream(packet.getName()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        @Override
-        public DirectoryWatcher getDirectoryWatcher() {
-            return directoryWatcher;
         }
     }
 
