@@ -143,7 +143,6 @@ public class PeerService {
             }
         }
 
-
         @Override
         public void update(Observable o, Object arg) {
             HashMap<String, FileInfo> paths = (HashMap<String, FileInfo>) arg;
@@ -199,6 +198,4 @@ public class PeerService {
             }
         }
     }
-
-
 }
