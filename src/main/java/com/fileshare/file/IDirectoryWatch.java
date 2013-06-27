@@ -2,6 +2,7 @@ package com.fileshare.file;
 
 import java.nio.file.WatchService;
 import java.util.Observable;
+import java.util.Set;
 
 /**
  * <p>Abstrakcyjna klasa monitorująca dany katalog w poszukiwaniu zmian.</p>
@@ -28,4 +29,5 @@ public abstract class IDirectoryWatch extends Observable implements Runnable {
      */
     public abstract void sendChanges();
 
+    public abstract void addFilesToIgnore(Set<String> fileList);
 }
