@@ -90,4 +90,12 @@ public class Connection implements Serializable {
     public void fusion(Address address) throws IOException {
         peer.fusion(address);
     }
+
+    public void ignoreFile(String fileName) {
+        try {
+            peer.ignoreFile(fileName);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 }

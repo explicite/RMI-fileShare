@@ -187,6 +187,11 @@ public class DirectoryWatcher extends IDirectoryWatch {
     }
 
     @Override
+    public void addFileToIgnore(String fileName) {
+        filesToIgnore.add(fileName);
+    }
+
+    @Override
     public void run() {
 //        this.watchChanges();
         watchDir();

@@ -21,6 +21,7 @@ public abstract class IDirectoryWatch extends Observable implements Runnable {
     /**
      * <code>watchChanges()</code> jest właściwą metodą monitorującą dany katalog. Aby uniknąć zeżarcia zasobów, sprawdzenie następuje co pewien, zdefiniowany wcześniej, czas.
      */
+    @Deprecated
     protected abstract void watchChanges();
 
     /**
@@ -29,5 +30,11 @@ public abstract class IDirectoryWatch extends Observable implements Runnable {
      */
     public abstract void sendChanges();
 
+
+    /**
+     * Dodanie nazw plików, które będą ignorowane raz i tylko raz. Używać przed przesłaniem pliku do zdalnego serwara.
+     */
     public abstract void addFilesToIgnore(Set<String> fileList);
+
+    public abstract void addFileToIgnore(String fileName);
 }

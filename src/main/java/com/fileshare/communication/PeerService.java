@@ -49,6 +49,12 @@ public class PeerService {
         @Deprecated
         public void receive(Packet packet)
                 throws RemoteException;
+
+        /**
+         * Metoda ma za zadanie dodawa? plik do listy ignorowanych przez DirectoryWatchera. W razie czego usun?? wszystko (procz metod w DW) co jest z tym zwiazane.
+         */
+        public void ignoreFile(String fileName)
+                throws RemoteException;
     }
 
     public static class Peer extends UnicastRemoteObject implements IPeer, Observer {
@@ -127,6 +133,7 @@ public class PeerService {
                     long len = file.length();
                     long t = System.currentTimeMillis();
                     try {
+                        connection.ignoreFile(file.toString());
                         connection.send(file);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -172,6 +179,11 @@ public class PeerService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        public void ignoreFile(String fileName) throws RemoteException {
+            directoryWatcher.addFileToIgnore(fileName);
         }
     }
 
