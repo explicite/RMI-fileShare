@@ -68,7 +68,9 @@ public class Connection implements Serializable {
 
     @Deprecated
     public synchronized void send(File src) throws IOException {
-        peer.receive(new Packet(src));
+        Packet packet = new Packet(src);
+        packet.readIn();
+        peer.receive(packet);
     }
 
     public synchronized void download(File destination) throws IOException {
