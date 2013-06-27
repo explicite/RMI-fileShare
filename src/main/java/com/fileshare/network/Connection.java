@@ -10,7 +10,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Set;
 
 /**
  * @author Jan Paw
@@ -70,10 +69,6 @@ public class Connection implements Serializable {
     @Deprecated
     public synchronized void send(File src) throws IOException {
         peer.receive(new Packet(src));
-    }
-
-    public synchronized void uploadFileList(Set<String> fileList){
-                peer.getDirectoryWatcher().addFilesToIgnore(fileList);
     }
 
     public synchronized void download(File destination) throws IOException {
