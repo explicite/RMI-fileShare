@@ -127,7 +127,7 @@ public class PeerService {
                     long len = file.length();
                     long t = System.currentTimeMillis();
                     try {
-                        connection.send(file);
+                        connection.upload(file);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -43,10 +43,12 @@ public class Connection implements Serializable {
 
         if (in instanceof InputStream) {
             ((InputStream) in).transfer(out);
+            return;
         }
 
         if (out instanceof OutputStream) {
             ((OutputStream) out).transfer(in);
+            return;
         }
 
         byte[] b = new byte[BUF_SIZE];
@@ -55,8 +57,8 @@ public class Connection implements Serializable {
             out.write(b, 0, len);
         }
 
-        out.close();
         in.close();
+        out.close();
     }
 
     public synchronized void upload(File src) throws IOException {
