@@ -43,10 +43,12 @@ public class Connection implements Serializable {
 
         if (in instanceof InputStream) {
             ((InputStream) in).transfer(out);
+            return;
         }
 
         if (out instanceof OutputStream) {
             ((OutputStream) out).transfer(in);
+            return;
         }
 
         byte[] b = new byte[BUF_SIZE];

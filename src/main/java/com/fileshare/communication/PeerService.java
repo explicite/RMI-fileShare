@@ -62,7 +62,6 @@ public class PeerService {
             super();
             this.address = new Address(name);
             clock = new Clock(address.toString());
-            connections = new ConnectionPool(clock, address);
             logger.info("New peer: " + name);
             this.bindingHandler = new BindingHandler(name, this);
             this.directoryWatcher = new DirectoryWatcher("./", 4, clock);
@@ -73,6 +72,7 @@ public class PeerService {
         public void start() throws Exception {
             logger.info("Binding network interface");
             bindingHandler.bind();
+            connections = new ConnectionPool(clock, address);
             //new Thread(connections).start();
         }
 
@@ -126,7 +126,7 @@ public class PeerService {
                         long len = file.length();
                         long t = System.currentTimeMillis();
                         try {
-                            connection.upload(file);
+                            connection.send(file);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
