@@ -41,7 +41,8 @@ public class Pipe implements Serializable {
         return key;
     }
 
-    protected void finalize() {
+    protected void finalize() throws Throwable {
+        super.finalize();
         if (isOutputRegistration)
             registry.remove(key);
     }

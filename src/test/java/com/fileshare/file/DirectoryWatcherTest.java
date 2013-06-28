@@ -45,7 +45,7 @@ public class DirectoryWatcherTest {
 
     @Test
     public void doesItEvenWorkTest() {
-        testFile = DummyFile.generateFile("./test", 5096);
+        testFile = DummyFile.generateFile(5096);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -59,7 +59,7 @@ public class DirectoryWatcherTest {
     @Test
     public void observerTest() {
         while (eventObserver.getCaughtEvent() == 0) {
-            testFile = DummyFile.generateFile("./test", 1024);
+            testFile = DummyFile.generateFile(1024);
         }
         assertTrue(eventObserver.getCaughtEvent() == FileInfo.FLAG_CREATED);
     }
@@ -69,7 +69,7 @@ public class DirectoryWatcherTest {
         Set<String> ignoreList = new HashSet<>();
         ignoreList.add("1MB");
         directoryWatcher.addFilesToIgnore(ignoreList);
-        testFile = DummyFile.generateFile("./test", 1024);
+        testFile = DummyFile.generateFile(1024);
 
         try {
             Thread.sleep(1500);

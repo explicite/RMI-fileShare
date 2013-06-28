@@ -17,22 +17,19 @@ public class ConnectionPool extends LinkedList<Connection> implements Runnable, 
     private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
     private static final long serialVersionUID = -6447733757552047292L;
     private ClockObserver clock;
-    volatile boolean inAction = false;
 
     public ConnectionPool(ClockObserver clock, Address address) {
         super();
         this.clock = clock;
-        inAction = true;
         for (Connection connection : Scanner.scan()) {
             try {
                 connection.fusion(address);
+                this.add(connection);
+                clock.add(connection.getAddress());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.add(connection);
-            clock.add(connection.getAddress());
         }
-        inAction = false;
     }
 
     @Override

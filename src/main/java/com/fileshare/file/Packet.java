@@ -10,7 +10,8 @@ import java.io.Serializable;
  */
 @Deprecated
 public class Packet implements Serializable {
-    private String name;
+    private static final long serialVersionUID = 7946700308200203095L;
+    private final String name;
     private byte[] data;
 
     public Packet(File file) {

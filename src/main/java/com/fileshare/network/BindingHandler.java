@@ -45,9 +45,7 @@ public class BindingHandler {
                     try {
                         registry.bind(address.toString(), peer);
                         logger.info(address);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    } catch (AlreadyBoundException e) {
+                    } catch (RemoteException | AlreadyBoundException e) {
                         e.printStackTrace();
                     }
                 }
@@ -60,9 +58,7 @@ public class BindingHandler {
             for (Address address : addressesToBind) {
                 try {
                     registry.unbind(address.toString());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (NotBoundException e) {
+                } catch (RemoteException | NotBoundException e) {
                     e.printStackTrace();
                 }
             }

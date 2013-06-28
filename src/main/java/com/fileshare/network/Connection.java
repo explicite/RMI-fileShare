@@ -32,9 +32,7 @@ public class Connection implements Serializable {
             try {
                 registry = LocateRegistry.getRegistry(address.getInetAddress().getHostAddress());
                 peer = (PeerService.IPeer) registry.lookup(address.toString());
-            } catch (NotBoundException e) {
-                e.printStackTrace();
-            } catch (RemoteException e) {
+            } catch (NotBoundException | RemoteException e) {
                 e.printStackTrace();
             }
         }

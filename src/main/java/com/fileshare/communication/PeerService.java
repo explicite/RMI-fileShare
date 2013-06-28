@@ -73,7 +73,7 @@ public class PeerService {
         public void start() throws Exception {
             logger.info("Binding network interface");
             bindingHandler.bind();
-            new Thread(connections).start();
+            //new Thread(connections).start();
         }
 
         public void stop() throws Exception {
@@ -168,7 +168,10 @@ public class PeerService {
         @Override
         public void receive(Packet packet) throws RemoteException {
             try {
-                packet.writeTo(new FileOutputStream(packet.getName()));
+                FileOutputStream fileOutputStream = new FileOutputStream(packet.getName());
+                packet.writeTo(fileOutputStream);
+                fileOutputStream.close();
+                fileOutputStream = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }

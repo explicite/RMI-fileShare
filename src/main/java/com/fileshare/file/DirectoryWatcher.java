@@ -22,7 +22,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
     private final Clock clock;
     private ArrayList<FileInfo> changesBuffer;
     private long lastUpdateTime;
-    private volatile  Set<String> filesToIgnore;
+    private volatile Set<String> filesToIgnore;
 
     /**
      * @param watchedDir ścieżka do obserwowania.
@@ -36,7 +36,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
         this.path = new File(watchedDir).toPath();
         this.clock = clock;
         this.changesBuffer = new ArrayList<>();
-        this.newChangesBuffer = new HashMap<String, FileInfo>();
+        this.newChangesBuffer = new HashMap<>();
         this.filesToIgnore = new HashSet<>();
         try {
             this.watchService = FileSystems.getDefault().newWatchService();

@@ -6,16 +6,17 @@ import java.io.RandomAccessFile;
 
 /**
  * Provides method to generate dummy file for tests.
+ *
  * @author Kamil Sikora
- * Data: 13.06.2013
+ *         Data: 13.06.2013
  */
 public class DummyFile {
 
     /**
      * @param size size in bytes.
      */
-    public static File generateFile(String path, int size) {
-        File file = new File(path + "//" + getFileName(size));
+    public static File generateFile(int size) {
+        File file = new File("./test" + "//" + getFileName(size));
 
         try {
             RandomAccessFile raf = new RandomAccessFile(file, "rw");

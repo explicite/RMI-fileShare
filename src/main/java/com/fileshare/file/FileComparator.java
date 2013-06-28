@@ -7,6 +7,7 @@ package com.fileshare.file;
  * Time: 23:15
  * To change this template use File | Settings | File Templates.
  */
+
 import difflib.Chunk;
 import difflib.Delta;
 import difflib.DiffUtils;
@@ -41,7 +42,7 @@ public class FileComparator {
     }
 
     private List<Chunk> getChunksByType(Delta.TYPE type) throws IOException {
-        final List<Chunk> listOfChanges = new ArrayList<Chunk>();
+        final List<Chunk> listOfChanges = new ArrayList<>();
         final List<Delta> deltas = getDeltas();
         for (Delta delta : deltas) {
             if (delta.getType() == type) {
@@ -62,7 +63,7 @@ public class FileComparator {
     }
 
     private List<String> fileToLines(File file) throws IOException {
-        final List<String> lines = new ArrayList<String>();
+        final List<String> lines = new ArrayList<>();
         String line;
         final BufferedReader in = new BufferedReader(new FileReader(file));
         while ((line = in.readLine()) != null) {

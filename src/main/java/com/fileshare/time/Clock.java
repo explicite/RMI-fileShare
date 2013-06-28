@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Clock implements IClock {
     private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
-    private Map<String, Integer> vector = new HashMap<String, Integer>();
+    private Map<String, Integer> vector = new HashMap<>();
     private String nodeId;
 
     public Clock(String id) {

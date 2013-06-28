@@ -13,14 +13,13 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Parallel {
     private final static int NUM_CORES = Runtime.getRuntime().availableProcessors();
-    private static ForkJoinPool forkJoinPool;
 
     public static <T> void For(final Iterable<T> elements, final Operation<T> operation) {
         For(NUM_CORES, elements, operation);
     }
 
     public static <T> void For(final int threadsNumber, final Iterable<T> elements, final Operation<T> operation) {
-        forkJoinPool = new ForkJoinPool(threadsNumber, ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(threadsNumber, ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true);
         forkJoinPool.invokeAll(createCallable(elements, operation));
     }
 
