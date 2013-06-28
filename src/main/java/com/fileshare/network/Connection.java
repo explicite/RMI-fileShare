@@ -61,7 +61,7 @@ public class Connection implements Serializable {
 
     public synchronized void upload(File src) throws IOException {
         copy(new FileInputStream(src),
-                peer.getOutputStream(new File(src.getName() + System.currentTimeMillis())));
+                peer.getOutputStream(new File(src.getName())));
     }
 
     @Deprecated
