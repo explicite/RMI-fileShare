@@ -1,5 +1,6 @@
 package com.fileshare.network;
 
+import com.fileshare.communication.Peer;
 import com.fileshare.communication.PeerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,9 +24,9 @@ public class BindingHandler {
     private final static Logger logger = LogManager.getLogger(PeerService.class.getName());
     private LinkedList<Address> addressesToBind = new LinkedList<>();
     private Registry registry;
-    private PeerService.IPeer peer;
+    private Peer peer;
 
-    public BindingHandler(String name, PeerService.IPeer peer) {
+    public BindingHandler(String name, Peer peer) {
         this.peer = peer;
 
         for (InetAddress inetAddress : NetworkInterfaces.networkInterfaces)

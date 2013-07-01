@@ -1,6 +1,6 @@
 package com.fileshare.network;
 
-import com.fileshare.communication.PeerService;
+import com.fileshare.communication.Peer;
 import com.fileshare.file.Packet;
 import com.fileshare.file.io.InputStream;
 import com.fileshare.file.io.OutputStream;
@@ -19,7 +19,7 @@ public class Connection implements Serializable {
     public final static int BUF_SIZE = 1024 * 64;
     public final static int TIMEOUT = 2000;
     private Address address;
-    private PeerService.IPeer peer = null;
+    private Peer peer = null;
     private Registry registry;
 
     public synchronized boolean isReachable(int timeout) {
@@ -31,7 +31,7 @@ public class Connection implements Serializable {
         if (isReachable(TIMEOUT)) {
             try {
                 registry = LocateRegistry.getRegistry(address.getInetAddress().getHostAddress());
-                peer = (PeerService.IPeer) registry.lookup(address.toString());
+                peer = (Peer) registry.lookup(address.toString());
             } catch (NotBoundException | RemoteException e) {
                 e.printStackTrace();
             }
@@ -43,12 +43,12 @@ public class Connection implements Serializable {
 
         if (in instanceof InputStream) {
             ((InputStream) in).transfer(out);
-            return;
+            //return;
         }
 
         if (out instanceof OutputStream) {
             ((OutputStream) out).transfer(in);
-            return;
+            //return;
         }
 
         byte[] b = new byte[BUF_SIZE];

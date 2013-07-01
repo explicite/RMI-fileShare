@@ -35,6 +35,7 @@ public class Packet implements Serializable {
     public void writeTo(java.io.OutputStream out) {
         try {
             out.write(data);
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

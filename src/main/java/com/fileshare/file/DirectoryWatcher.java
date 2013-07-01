@@ -1,6 +1,7 @@
 package com.fileshare.file;
 
 import com.fileshare.communication.PeerService;
+import com.fileshare.file.util.FileInfo;
 import com.fileshare.time.Clock;
 import org.apache.logging.log4j.LogManager;
 
@@ -112,7 +113,7 @@ public class DirectoryWatcher extends IDirectoryWatch {
                         List<WatchEvent<?>> events = bDirWatchKey.pollEvents();
                         for (WatchEvent<?> event : events) {
                             WatchEvent<Path> eventItem = cast(event);
-                            logger.info(path.getFileName() + " event: #" + event.count() + "," + event.kind() + " File=" + event.context());
+                            logger.info(path.getFileName() + " event: #" + event.count() + "," + event.kind() + " FileSystem=" + event.context());
                             String fileName = eventItem.context().toFile().getName();
                             if (filesToIgnore.contains(fileName)) {
                                 filesToIgnore.remove(fileName);

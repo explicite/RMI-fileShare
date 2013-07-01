@@ -1,7 +1,6 @@
-package com.fileshare.file;
+package com.fileshare.file.util;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 

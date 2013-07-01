@@ -1,4 +1,4 @@
-package com.fileshare.file;
+package com.fileshare.file.util;
 
 import com.fileshare.file.io.Pipe;
 

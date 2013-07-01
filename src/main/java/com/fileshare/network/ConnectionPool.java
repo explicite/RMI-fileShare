@@ -33,7 +33,7 @@ public class ConnectionPool extends LinkedList<Connection> implements Runnable, 
     }
 
     @Override
-    public void run() {
+    public void run() { //TODO
         while (!Thread.currentThread().isInterrupted()) {
             for (Connection connection : this)
                 if (!connection.isReachable(Connection.TIMEOUT * 10)) {

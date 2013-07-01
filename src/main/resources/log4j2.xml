@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="warn" name="Server" packages="">
     <appenders>
-        <File name="Peer" fileName="log/peer.log">
+        <File name="Peer" fileName="log/localPeer.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
         <Console name="Console" target="SYSTEM_OUT">

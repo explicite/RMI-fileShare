@@ -1,6 +1,5 @@
-package com.fileshare.communication.service.impl;
+package com.fileshare.communication;
 
-import com.fileshare.communication.service.IOutputStreamService;
 import com.fileshare.file.io.Pipe;
 
 import java.io.IOException;
@@ -12,11 +11,11 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Jan Paw
  *         Date: 6/11/13
  */
-public class OutputStreamService implements IOutputStreamService, Serializable {
+public class RemoteOutputStream implements OutputStream, Serializable {
     private transient java.io.OutputStream out;
     private Pipe pipe;
 
-    public OutputStreamService(java.io.OutputStream out) throws RemoteException {
+    public RemoteOutputStream(java.io.OutputStream out) throws RemoteException {
         this.out = out;
         this.pipe = new Pipe(out);
         UnicastRemoteObject.exportObject(this, 1099);

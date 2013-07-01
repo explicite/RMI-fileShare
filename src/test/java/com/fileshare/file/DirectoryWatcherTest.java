@@ -1,5 +1,6 @@
 package com.fileshare.file;
 
+import com.fileshare.file.util.FileInfo;
 import com.fileshare.time.Clock;
 import org.junit.After;
 import org.junit.Before;

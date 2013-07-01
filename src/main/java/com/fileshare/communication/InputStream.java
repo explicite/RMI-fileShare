@@ -1,4 +1,4 @@
-package com.fileshare.communication.service;
+package com.fileshare.communication;
 
 import com.fileshare.file.io.Pipe;
 
@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
  * @author Jan Paw
  *         Date: 6/11/13
  */
-public interface IInputStreamService extends Remote {
+public interface InputStream extends Remote {
     public byte[] readBytes(int len)
             throws IOException, RemoteException;
 

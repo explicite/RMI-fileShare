@@ -1,11 +1,11 @@
-package com.fileshare.file;
+package com.fileshare.file.util;
 
 /**
  * Created with IntelliJ IDEA.
  * User: madger
  * Date: 12.06.13
  * Time: 23:15
- * To change this template use File | Settings | File Templates.
+ * To change this template use FileSystem | Settings | FileSystem Templates.
  */
 
 import difflib.Chunk;
