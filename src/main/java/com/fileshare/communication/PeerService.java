@@ -121,6 +121,7 @@ public class PeerService {
 
                         if (len <= 0)
                             len = 1;
+
                         if (t <= 0)
                             t = 1;
 
