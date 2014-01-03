@@ -1,7 +1,5 @@
 package com.fileshare.file.io;
 
-import com.fileshare.communication.service.IInputStreamService;
-
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -10,9 +8,9 @@ import java.io.Serializable;
  *         Date: 6/11/13
  */
 public class InputStream extends java.io.InputStream implements Serializable {
-    private IInputStreamService in;
+    private com.fileshare.communication.InputStream in;
 
-    public InputStream(IInputStreamService in) {
+    public InputStream(com.fileshare.communication.InputStream in) {
         this.in = in;
     }
 

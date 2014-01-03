@@ -1,10 +1,10 @@
 package com.fileshare.file;
 
+import com.fileshare.file.util.FileInfo;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 
 import static org.junit.Assert.assertTrue;

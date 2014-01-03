@@ -31,7 +31,7 @@ public enum Scanner {
 
         for (int host = 0; host < 256; host++) {    //TODO IPv6
             if (host != Integer.valueOf(localPostfix))
-                addresses.add(new Address(localPrefix + host, "peer"));
+                addresses.add(new Address(localPrefix + host, "localPeer"));
         }
 
         Parallel.For(addresses.size(), addresses, new Parallel.Operation<Address>() {

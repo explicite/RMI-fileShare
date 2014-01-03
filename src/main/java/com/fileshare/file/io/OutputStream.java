@@ -1,7 +1,6 @@
 package com.fileshare.file.io;
 
-import com.fileshare.communication.service.IOutputStreamService;
-import com.fileshare.communication.service.impl.OutputStreamService;
+import com.fileshare.communication.RemoteOutputStream;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,10 +11,10 @@ import java.io.Serializable;
  *         Date: 6/11/13
  */
 public class OutputStream extends java.io.OutputStream implements Serializable {
-    private IOutputStreamService out;
+    private com.fileshare.communication.OutputStream out;
     private int pipeKey;
 
-    public OutputStream(OutputStreamService out) {
+    public OutputStream(RemoteOutputStream out) {
         this.out = out;
     }
 
